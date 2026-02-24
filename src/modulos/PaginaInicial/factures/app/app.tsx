@@ -2,9 +2,6 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { CheckCircle, AlertCircle, DownloadCloud } from 'lucide-react';
 import api from "../../service/apiUsuario";
-
-// --- Styled Components Refinados ---
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
