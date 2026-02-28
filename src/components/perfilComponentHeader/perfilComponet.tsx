@@ -49,7 +49,7 @@ export const PerfilComponet = () => {
 
     const paths: Record<string, string> = {
       "Meus Registros": "/portaria/controle/meus-registros",
-      "Minha Conta": "/required/profile",
+      "Minha Conta": "/portaria/configuracao/my-count",
       "Registros Gerais": "/portaria/active/gerais",
       "Portaria Pendentes": "/portaria/active/pendentes",
       "Controle De Registros": "/portaria/configuracao",

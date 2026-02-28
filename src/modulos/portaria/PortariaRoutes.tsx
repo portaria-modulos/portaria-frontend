@@ -13,6 +13,7 @@ import MeusRegistros from "./factures/registros/registro_portaria/registro";
 import { VisitantesListaComponets } from "./factures/Visitantes/visitantes";
 import { ConfiguracaoComponent } from "./factures/config/config";
 import { ListahistoryComponent } from "./factures/history/lista/ListaHistory";
+import { MeuPerfil } from "../PaginaInicial/factures/meu_perfil/meu_Perfil";
 function PortariaRoutes() {
     const perfil = subjet()
     function lazyWidth<T extends ComponentType>
@@ -76,6 +77,10 @@ function PortariaRoutes() {
                     </ProtectedRoute>
                 }>
                 </Route>
+                <Route path="my-count" element={
+                    <MeuPerfil key={Date.now()}
+                    />
+                } />
             </Route>
             <Route path="/teste" element={<HomeComponent key={Date.now()} />} />
             {/* rota pai */}
