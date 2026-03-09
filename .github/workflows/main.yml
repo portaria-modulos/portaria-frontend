@@ -17,8 +17,8 @@ jobs:
               password: ${{secrets.DOCKERHUB_PASSWORD}}
           - name: build e push de imagem
             run: |
-              docker build -t elivandrolopes/front-portaria:7.0 .
-              docker push elivandrolopes/front-portaria:7.0
+              docker build -t elivandrolopes/front-portaria:8.0 .
+              docker push elivandrolopes/front-portaria:8.0
     deploy:
       needs: build
       runs-on: [self-hosted,linux]
