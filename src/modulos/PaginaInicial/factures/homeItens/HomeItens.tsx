@@ -29,7 +29,7 @@ export const HomeItens = () => {
             }
         }
         handleApi()
-    }, [usuario?.id])
+    }, [])
     // p=>perfil.permissoes.includes(p))
     function retornaIcone(modulo: string, valor: any) {
         switch (modulo) {
