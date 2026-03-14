@@ -9,6 +9,11 @@ type colorProps = {
     color: string;
 }
 
+// Interface para controlar o tamanho/densidade da tabela
+interface TableProps {
+    density?: 'compact' | 'standard';
+}
+
 const Styles = {
     container: styled.div`
         min-height: 100vh;
@@ -44,84 +49,60 @@ const Styles = {
         border-radius: 12px;
     `,
 
-    CamposInput: styled.div`
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-        padding: 12px;
-        background: #f1f5f9;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        & > * {
-            @media (max-width: 480px) {
-                flex: 1 1 100%;
-            }
-        }
-    `,
-
-    Chip: styled.div<colorProps>`
-        display: inline-flex;
-        align-items: center;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        background-color: ${({ color }) => color + '15'}; 
-        color: ${({ color }) => color};
-        border: 1px solid ${({ color }) => color + '30'};
-        white-space: nowrap;
-    `,
-
-    // --- LÓGICA DO SCROLL NO TOPO ---
+    // --- NOVA LÓGICA DE TABELA E SCROLL ---
     TableContainer: styled.div`
         width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: auto; /* Scroll horizontal se a tabela for larga */
+        overflow-y: auto; /* Scroll vertical interno */
+        max-height: 70vh; /* Define altura para o scroll vertical funcionar */
         border: 1px solid #e2e8f0;
-        border-radius: 10px;
+        border-radius: 12px;
         background: #fff;
+        position: relative;
 
-        /* Inverte o container para o scroll ir para o topo */
-        transform: rotateX(180deg); 
-        
-        /* Personalização da barra para mobile/web */
+        /* Personalização da barra de scroll */
         &::-webkit-scrollbar {
+            width: 8px;
             height: 8px;
         }
         &::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
+        &::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
     `,
 
-    Table: styled.table`
+    Table: styled.table<TableProps>`
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate; /* Necessário para o sticky header não "vazar" border */
+        border-spacing: 0;
         font-family: "Inter", sans-serif;
-        min-width: 800px; 
-
-        /* Inverte o conteúdo da tabela de volta ao normal */
-        transform: rotateX(180deg); 
+        min-width: 1100px; /* Garante que os dados não fiquem espremidos */
 
         thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
             background-color: #f8fafc;
         }
 
         th {
-            padding: 14px 16px;
-            font-size: 0.7rem;
+            /* Padding e fonte mudam conforme a densidade escolhida no header */
+            padding: ${({ density }) => (density === 'compact' ? '8px 12px' : '14px 16px')};
+            font-size: ${({ density }) => (density === 'compact' ? '0.65rem' : '0.7rem')};
             font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
             border-bottom: 2px solid #e2e8f0;
             text-align: left;
+            white-space: nowrap;
         }
 
         td {
-            padding: 12px 16px;
-            font-size: 0.85rem;
+            padding: ${({ density }) => (density === 'compact' ? '6px 12px' : '12px 16px')};
+            font-size: ${({ density }) => (density === 'compact' ? '0.75rem' : '0.85rem')};
             color: #334155;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
@@ -132,7 +113,27 @@ const Styles = {
             background-color: #f8fafc;
         }
     `,
-    // --- FIM DA LÓGICA DO SCROLL ---
+
+    ActionCell: styled.div`
+        display: flex;
+        gap: 4px;
+        align-items: center;
+        justify-content: flex-start;
+    `,
+
+    Chip: styled.div<colorProps>`
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        background-color: ${({ color }) => color + '15'}; 
+        color: ${({ color }) => color};
+        border: 1px solid ${({ color }) => color + '30'};
+        white-space: nowrap;
+    `,
 
     loadingRow: styled.tr`
         td {
@@ -148,12 +149,6 @@ const Styles = {
         align-items: center;
         gap: 12px;
         color: #64748b;
-    `,
-
-    trBTN: styled.div`
-        display: flex;
-        justify-content: flex-end;
-        gap: 4px;
     `,
 
     visitante: styled.div`
@@ -197,27 +192,11 @@ const Styles = {
         position: relative;
     `,
 
-    tituloLabel: styled.label`
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #475569;
-    `,
-
     imgem: styled.img`
         width: 100%;
         height: 220px;
         object-fit: cover;
         border-radius: 8px;
-        @media (max-width: 768px) {
-            height: auto;
-        }
-    `,
-
-    btnDownload: styled.div`
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 10;
     `,
 
     erro: styled.div`
@@ -234,6 +213,7 @@ const Styles = {
         align-items: center;
         gap: 12px;
         color: #94a3b8;
+        padding: 40px 0;
     `,
 
     iconSemItens: styled(MdInbox)`
@@ -241,19 +221,6 @@ const Styles = {
         color: #cbd5e1;
     `,
 
-    Options: styled.option``,
-    Select: styled.div`
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    `,
-    label: styled.label`
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #475569;
-        margin-bottom: 4px;
-    `,
     Campos: styled.input<CamposProps>`
         width: 100%;
         height: 38px;
