@@ -1,5 +1,5 @@
 import { MdInbox } from "react-icons/md";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 interface CamposProps {
     hasError?: boolean;
@@ -13,6 +13,12 @@ type colorProps = {
 interface TableProps {
     density?: 'compact' | 'standard';
 }
+
+// Animação para o Skeleton Loading
+const shimmer = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
 
 const Styles = {
     container: styled.div`
@@ -49,21 +55,21 @@ const Styles = {
         border-radius: 12px;
     `,
 
-    // --- NOVA LÓGICA DE TABELA E SCROLL ---
+    // --- CONTAINER COM SCROLL OTIMIZADO ---
     TableContainer: styled.div`
         width: 100%;
-        overflow-x: auto; /* Scroll horizontal se a tabela for larga */
-        overflow-y: auto; /* Scroll vertical interno */
-        max-height: 70vh; /* Define altura para o scroll vertical funcionar */
+        overflow-x: auto;
+        overflow-y: auto;
+        max-height: 65vh; /* Altura para ativar o scroll vertical */
         border: 1px solid #e2e8f0;
         border-radius: 12px;
         background: #fff;
         position: relative;
 
-        /* Personalização da barra de scroll */
+        /* Customização da Barra de Rolagem */
         &::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
         }
         &::-webkit-scrollbar-thumb {
             background: #cbd5e1;
@@ -76,10 +82,10 @@ const Styles = {
 
     Table: styled.table<TableProps>`
         width: 100%;
-        border-collapse: separate; /* Necessário para o sticky header não "vazar" border */
+        border-collapse: separate;
         border-spacing: 0;
         font-family: "Inter", sans-serif;
-        min-width: 1100px; /* Garante que os dados não fiquem espremidos */
+        min-width: 1200px; 
 
         thead {
             position: sticky;
@@ -89,9 +95,8 @@ const Styles = {
         }
 
         th {
-            /* Padding e fonte mudam conforme a densidade escolhida no header */
             padding: ${({ density }) => (density === 'compact' ? '8px 12px' : '14px 16px')};
-            font-size: ${({ density }) => (density === 'compact' ? '0.65rem' : '0.7rem')};
+            font-size: ${({ density }) => (density === 'compact' ? '0.65rem' : '0.75rem')};
             font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
@@ -106,11 +111,18 @@ const Styles = {
             color: #334155;
             border-bottom: 1px solid #f1f5f9;
             vertical-align: middle;
-            white-space: nowrap; 
+            white-space: nowrap;
+            transition: background 0.2s;
         }
 
-        tbody tr:hover {
-            background-color: #f8fafc;
+        tbody tr {
+            &:hover {
+                background-color: #f1f5f9;
+                /* Linha de destaque lateral ao passar o mouse */
+                td:first-child {
+                    box-shadow: inset 4px 0 0 0 #6366f1;
+                }
+            }
         }
     `,
 
@@ -135,11 +147,26 @@ const Styles = {
         white-space: nowrap;
     `,
 
+    // --- SKELETON LOADING ---
+    SkeletonRow: styled.div`
+        width: 100%;
+        height: 20px;
+        background: #f1f5f9;
+        background-image: linear-gradient(
+            90deg, 
+            #f1f5f9 0px, 
+            #e2e8f0 40px, 
+            #f1f5f9 80px
+        );
+        background-size: 200% 100%;
+        animation: ${shimmer} 1.5s infinite linear;
+        border-radius: 4px;
+    `,
+
     loadingRow: styled.tr`
         td {
-            padding: 40px 0;
-            text-align: center;
-            border-bottom: none;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
         }
     `,
 
@@ -149,6 +176,7 @@ const Styles = {
         align-items: center;
         gap: 12px;
         color: #64748b;
+        padding: 40px 0;
     `,
 
     visitante: styled.div`
@@ -158,14 +186,6 @@ const Styles = {
         padding: 15px;
         border-bottom: 1px solid #e2e8f0;
         h5 { margin: 0; color: #1e293b; font-size: 1.1rem; }
-    `,
-
-    imgemVisitante: styled.img`
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 2px solid #6366f1;
     `,
 
     imagemArea: styled.div`
@@ -199,21 +219,14 @@ const Styles = {
         border-radius: 8px;
     `,
 
-    erro: styled.div`
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 50px 0;
-    `,
-
     semItens: styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 12px;
         color: #94a3b8;
-        padding: 40px 0;
+        padding: 60px 0;
+        text-align: center;
     `,
 
     iconSemItens: styled(MdInbox)`
@@ -228,9 +241,11 @@ const Styles = {
         border: 1px solid ${({ hasError }) => (hasError ? '#ef4444' : '#e2e8f0')};
         padding: 8px 12px;
         box-sizing: border-box;
+        transition: all 0.2s;
         &:focus {
             outline: none;
             border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
     `
 };
