@@ -22,7 +22,8 @@ type FormData = {
     criadorId: number,
     globalAtivo?: any,
     dataAcesso?: any,
-    filialSolicitado:any
+    filialSolicitado: any,
+    placaVeiculo?: any
 };
 type VisitanteData = {
     id: any,
@@ -78,13 +79,13 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
             }
             data.typeMethod = "VISITANTE";
             data.visitanteId = visitante?.id
-            if(tipoAcesso==null){
-               data.tipoAcesso = visitante.categoriaAcesso;
+            if (tipoAcesso == null) {
+                data.tipoAcesso = visitante.categoriaAcesso;
             }
-             if (!data.filialSolicitado) {
-                                notify("Selecione a filial da Solicitação", "error")
-                                return;
-                            }
+            if (!data.filialSolicitado) {
+                notify("Selecione a filial da Solicitação", "error")
+                return;
+            }
             const resposta = await Api.RegistroFactory(data);
             if (resposta) {
                 setbloqueioBTN(false)
@@ -131,21 +132,21 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
         buscar_recorencia();
         hendleBusca();
     }, []);
-    const [listaFiliais,setListaFiliais]=useState<any[]>([])
+    const [listaFiliais, setListaFiliais] = useState<any[]>([])
 
-     const carregarFiliais = useCallback(async () => {
-            try {
-                const resposta = await apiUsuario.FiliaisUsuario(usuario?.id);
-                if (resposta?.acess) {
-                    setListaFiliais(resposta.acess);
-                }
-            } catch (error) {
-                notify("Erro ao carregar filiais", "error");
+    const carregarFiliais = useCallback(async () => {
+        try {
+            const resposta = await apiUsuario.FiliaisUsuario(usuario?.id);
+            if (resposta?.acess) {
+                setListaFiliais(resposta.acess);
             }
-        }, []);
-        useEffect(() => {
-            carregarFiliais();
-        }, [])
+        } catch (error) {
+            notify("Erro ao carregar filiais", "error");
+        }
+    }, []);
+    useEffect(() => {
+        carregarFiliais();
+    }, [])
     return (
         <>
             <Template.container>
@@ -174,24 +175,24 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                                 <Template.Label>NumeroTelefone:</Template.Label>
                                 <Template.LabelSubtitulo>{visitante?.numeroTelefone}</Template.LabelSubtitulo>
                             </Template.AreaItemJust>
-                            {/* <Template.AreaItemJust>
+                            <Template.AreaItemJust>
                                 <Template.Label>Placa:</Template.Label>
                                 <Template.LabelSubtitulo>{visitante?.placaVeiculo}</Template.LabelSubtitulo>
-                            </Template.AreaItemJust> */}
+                            </Template.AreaItemJust>
                             {/* <p><strong>Data entrada:</strong> <Template.Bold>1100011</Template.Bold></p> */}
                         </Template.ItemDetails>
                     </Template.CardCentro>
                     <Template.pedidos>
                         <Template.FormSub >
                             <Template.Select>
-                                 <Template.leftArea>
+                                <Template.leftArea>
                                     <Template.CamposInput>
                                         <Template.label >Filial Destino<Resize>*</Resize></Template.label>
                                         <Template.SelectItens {
                                             ...register("filialSolicitado", { required: "Selecione a filial de Destino" })}>
                                             <Template.Options value="">Selecione</Template.Options>
                                             {listaFiliais.flatMap((item) => (
-                                                <Template.Options value={item?.filial}>{item?.filial + "-"+ item?.nome.toUpperCase()}</Template.Options>
+                                                <Template.Options value={item?.filial}>{item?.filial + "-" + item?.nome.toUpperCase()}</Template.Options>
 
                                             ))}
                                         </Template.SelectItens>
@@ -199,6 +200,22 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                                     </Template.CamposInput>
                                 </Template.leftArea>
                                 {/* Select 1  corrigido*/}
+                                <Template.label>Placa Veiculo (Opcional) <Resize></Resize></Template.label>
+                                <Template.Campos
+                                    hasError={!!errors.placaVeiculo} type="text"
+                                    autoComplete="current-password"
+                                    placeholder="Placa do Veiculo"
+
+                                    {...register("placaVeiculo", {
+                                        pattern: {
+                                            value: /^([^0-9][^0-9][^0-9][0-9][A-Za-z0-9][0-9][0-9])/,
+                                            message: "Formato de placa inválido. Ex: ABC1234 ou ABC1D23",
+                                        }
+                                    })}
+                                />
+                                <Template.Erros>
+                                    {errors?.placaVeiculo && <p>{errors?.placaVeiculo?.message as any}</p>}
+                                </Template.Erros>
                                 <Template.leftArea>
                                     <Template.CamposInput>
                                         <Template.label >Bloco<Resize>*</Resize></Template.label>
