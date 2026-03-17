@@ -296,7 +296,7 @@ const VisualizarRegistro = () => {
                   {item?.entrada && item?.entrada?.imagem &&
                     <Template.ImagemItemRecebido>
                       <p><strong>Imagem Entrada:</strong></p>
-                      <small style={{ fontSize: 10, color: "#333" }}>{handleConvertData(item?.entrada?.dataEntrada)}</small>
+                      <small style={{ fontSize: 10, color: "#333" }}>{handleConvertData(item?.entrada?.dataEntrada)} | {item?.entrada?.filial}</small>
                       <Template.ItemImage onClick={() => hendleBTNIMG(item.entrada.imagem)} src={item?.entrada?.imagem} />
                     </Template.ImagemItemRecebido>
                   }
