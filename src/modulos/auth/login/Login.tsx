@@ -4,7 +4,7 @@ import {
     InputWrapper, Password
 } from "./Container";
 import { useForm } from "react-hook-form";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import salve from "../../../localStorage/service-localStorage";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -41,7 +41,7 @@ export const LoginComponen = () => {
         }
     };
 
-    const senhaRef = useRef<HTMLInputElement>(null);
+    // const senhaRef = useRef<HTMLInputElement>(null);
 
     return (
         <Container>

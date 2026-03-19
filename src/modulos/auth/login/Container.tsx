@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-interface CamposProps {
-  hasError?: boolean;
-}
+// interface CamposProps {
+//   hasError?: boolean;
+// }
 
 export const Container = styled.section`
   display: flex;
