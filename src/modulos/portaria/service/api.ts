@@ -109,6 +109,7 @@ const atualizaCadastro = async (endpoint: string, body: any) => {
 const listaVisistante = async (endpoint: string, busca: string,page:any) => {
   const params = new URLSearchParams();
   params.append("busca", busca)
+  params.append("size","100")
    if (page !== undefined && page !== null) {
       params.append("page", page)
     }

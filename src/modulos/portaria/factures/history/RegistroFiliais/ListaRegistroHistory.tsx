@@ -102,7 +102,11 @@ export const ListaRegistroComponent = () => {
           <Template.CamposInput>
             <div className="search-container">
               <SearchIcon />
-              <input type="text" placeholder="Busca..." value={busca} onChange={(e) => setBusca(e.target.value)} />
+              <input type="text"
+               placeholder="Busca..." value={busca} 
+               onChange={(e) => setBusca(e.target.value)}
+               onKeyDown={(e) => e.key === 'Enter' && onSubmit()}
+                />
             </div>
 
             <SelectVariants value={selectedValue} onChange={setSelectedValue} titulo={"Status"} list={[{ nome: "Aberto", value: true }, { nome: "Fechado", value: false }]} />
