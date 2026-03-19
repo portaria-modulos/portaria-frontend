@@ -1,232 +1,183 @@
 import styled from "styled-components";
-import { MdInbox } from "react-icons/md"; // ícone bonito de "sem itens"
 
 export default {
-  container: styled.div`
-    background-color: #f2f2f2;
-    padding: 20px 0;
-    min-height: 100vh;
-  `,
   area_pedidos: styled.section`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
     width: 100%;
-    max-width: 900px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 10px;
-    @media screen and (max-width: 700px) {
-     max-width: 700px; 
-         padding: 5px;
-
+    padding: 24px;
+    background-color: #f8fafc;
+    /* Fonte moderna para sistema SaaS */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    @media (max-width: 768px) {
+      padding: 12px;
     }
   `,
-  titulo: styled.h1`
-    font-size: 22px;
-    font-weight: bold;
-    font-family:sans-serif;
-    margin-bottom: 10px;
-    color: var(--cor-titulo);
-  `,
-  pedidos: styled.section`
-    display: flex;
-    flex-direction: column; /* Mantém itens um abaixo do outro */
+
+  pedidos: styled.div`
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 20px;
-    width: 100%;
-    box-sizing: border-box;
+
+    /* Grid de 2 colunas para PC */
+    @media (min-width: 1024px) {
+      grid-template-columns: 1fr 1fr;
+    }
   `,
+
   cardItem: styled.div`
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    background: #fff;
-    border-radius: 15px;
-    padding: 15px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
     &:hover {
-      transform: translateY(-2px);
+      border-color: #3b82f6;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+      transform: translateY(-3px);
+    }
+
+    &:active {
+      transform: scale(0.99);
     }
   `,
-  card_item_header: styled.div`
-    width: 100%;
+
+  headerInfo: styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px 16px;
+    background: #f8fafc;
+    border-bottom: 1px solid #f1f5f9;
   `,
-  card_item_center: styled.div`
-    display: flex;
-    align-items: center;
-    justify-content:space-between;
-    gap: 20px;
-    @media screen and (max-width: 420px) {
-      justify-content: space-between;
 
-    }
+  DataCriacao: styled.span`
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 600;
+    letter-spacing: 0.02em;
   `,
-  numeroDoPedido: styled.h4`
-    font-size: 14px;
-    color: #756f6f;
-  `,
-   data: styled.small`
-    font-size: 9px;
-    font-family: "inter";
-    color: #756f6f;
-  `,
-  btnAguadandoPagamento: styled.div`
-    background-color: #eeb853;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 10px;
-    font-size: 14px;
-  `,
-  AreaStatus:styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    /* @media screen and (max-width:560px){
-          flex-direction: row-reverse;
 
-    } */
+  MainBody: styled.div`
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: center; /* Centraliza verticalmente a foto com o texto */
   `,
 
   Image: styled.img`
-     width: 80px;
-  height: 80px;
-  border-radius: 10%;
-  /* object-fit: cover;
-  border: 2px solid #ddd; */
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
     object-fit: cover;
-    border: 4px solid #fff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 16px;
-      object-position: center bottom top;
-
-
-    @media screen and (min-width: 600px) {
-      margin-bottom: 0;
-    }
+    background: #f1f5f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
   `,
-  dataPedido: styled.div`
-  font-size: 14px;
-  color: #999;
-  margin-bottom: 5px;
-  padding-left: 5px;
-`,
-  Areaitem: styled.div`
-  display: flex;
-  flex: 1;
-  gap: 1px;
-  flex-direction: column;
-`,
-  inforLabel: styled.div`
-  display: flex;
-  align-items: center;
-  text-align:center;
-  word-wrap: break-word;
-  gap:2px;
 
-`,
-loading:styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50vh;
-  
-`,
-buttonNext:styled.button`
- color: blue;
- background-color:blue;
- cursor: pointer;
- border: 0;
-  background: transparent;
-  transition: all 0.2s ease-in-out;
-  border-radius: 5px;
-  font-size: 16px;
- &:hover{
-  color: #8484f5;
-  padding: 2px;
-
- }
- &:active{
-    transform: scale(0.97);
-    color: #5555ff;       /* muda a cor quando clicado */
-    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); /* efeito de pressionado */
-
- }
-
-`,
-  Span: styled.span`
-    font-size: 14px;
-    font-family:Arial, Helvetica, sans-serif;
-    font-weight: 600;
-    color:#374151;
-    @media screen and (max-width: 560px){
-      font-size: 12px;
-              letter-spacing: 0.2;
-
-      
-    }
-  `,
-  Infor: styled.small`
-    font-size: 13px;
-    color: #494545;
-        letter-spacing: 0.5;
-        margin-top: 2px;
-    @media screen and (max-width: 560px){
-      font-size: 11px;
-              letter-spacing: 0.2;
-
-      
-    }
-
-  `,
-  semItens: styled.div`
+  InfoContent: styled.div`
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #555;
-    height: 60vh;
-    font-size: 16px;
-    gap: 10px;
-    opacity: 0.8;
+    gap: 6px;
+    min-width: 0;
   `,
 
-  iconSemItens: styled(MdInbox)`
-    font-size: 60px;
-    color: #999;
+  NomeVisitante: styled.h3`
+    margin: 0;
+    font-size: 15px;
+    color: #0f172a;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    /* Evita quebra de layout se o nome for gigante */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   `,
-  btn:styled.div`
-  display: flex;
-  justify-content:flex-end;
-   right: 1;
-   @media screen and (max-width:560px){
-    flex: 0;
-    padding: 5px;
-    
-   }
+
+  LabelGroup: styled.div`
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
   `,
+
+  BadgeDado: styled.div`
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  `,
+AcessoConfirmadoBox: styled.div`
+    margin-top: 8px;
+    padding: 8px 12px; /* Reduzi um pouco o padding para acompanhar a fonte menor */
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    .confirmacao-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10.5px; /* Fonte menor e mais elegante */
+      color: #166534;
+      font-weight: 500;
+      
+      span {
+        letter-spacing: 0.2px;
+      }
+
+      strong {
+        font-weight: 800;
+        color: #14532d;
+        text-transform: uppercase;
+      }
+    }
+
+    .horario-detalhado {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-left: 20px; /* Alinhado com o início do texto do header */
+      
+      .item-data, .item-hora {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 9.5px; /* Fonte da data e hora bem pequena */
+        color: #15803d;
+        font-weight: 600;
+        opacity: 0.9; /* Deixa um pouco mais suave para não brigar com o nome */
+      }
+    }
+  `,
+
   sentinela: styled.div`
     width: 100%;
-    height: 100px; /* Altura generosa para garantir detecção */
+    padding: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-    background: transparent;
   `,
+
   loadingFooter: styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    font-weight: 500;
-  `,
-
-
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 14px;
+  `
 };

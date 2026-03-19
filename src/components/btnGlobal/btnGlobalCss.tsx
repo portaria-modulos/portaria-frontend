@@ -6,50 +6,54 @@ type Props = {
   global: LoginType;
 };
 
-const loginStyles: Record<LoginType, { bg: string; hoverBg: string; color: string; hoverColor: string }> = {
+const loginStyles: Record<LoginType, { bg: string; color: string; border?: string }> = {
   code: {
-    bg: "#cad4d4",
-    hoverBg: "transparent",
-    color: "#000",
-    hoverColor: "#dad6d6",
+    bg: "#f1f5f9", 
+    color: "#64748b",
+    border: "#e2e8f0"
   },
   admin: {
-    bg: "red",
-    hoverBg: "darkred",
+    bg: "#dc2626", // Vermelho mais fechado, menos "aceso"
     color: "#fff",
-    hoverColor: "#fff",
   },
   default: {
-    bg: "#007BFF",
-    hoverBg: "#0056b3",
+    bg: "#2563eb", // Azul royal mais elegante
     color: "#fff",
-    hoverColor: "#fff",
   },
 };
 
 export const BtnLogin = styled.button<Props>`
-  margin: 5px 0;
+  margin: 4px 0;
   width: 100%;
-  height: 35px;
-  border:0;
-  border-radius: 5px;
-  padding: 0 5px;
+  height: 34px; /* Voltamos para a altura slim que você prefere */
+  border: ${({ global }) => loginStyles[global]?.border ? `1px solid ${loginStyles[global].border}` : '0'};
+  border-radius: 6px; /* Arredondado sutil, mais profissional */
+  padding: 0 12px;
+  font-family: 'Inter', sans-serif;
   font-size: 12px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  transform: scale(0.97);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  transition: all 0.2s ease;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   
   background-color: ${({ global }) => loginStyles[global]?.bg ?? loginStyles.default.bg};
   color: ${({ global }) => loginStyles[global]?.color ?? loginStyles.default.color};
 
-  &:active {
-    transform: scale(0.95);
-    font-size: 11px;
+  &:hover {
+    filter: brightness(0.92); /* Escurece levemente sem mudar a cor na mão */
   }
 
-  &:hover {
-    background-color: ${({ global }) => loginStyles[global]?.hoverBg ?? loginStyles.default.hoverBg};
-    color: ${({ global }) => loginStyles[global]?.hoverColor ?? loginStyles.default.hoverColor};
+  &:active {
+    transform: scale(0.97); /* Feedback de clique discreto */
+    filter: brightness(0.85);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 `;

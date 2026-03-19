@@ -1,132 +1,204 @@
-import { MdInbox } from "react-icons/md";
 import styled from "styled-components";
 
-type colorProps = { color: string; }
+export default {
+  container: styled.div`
+    background-color: #f8fafc;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  `,
 
-const Styles = {
-    container: styled.div`
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        padding: 24px 10px;
-        background-color: #f4f7f6; 
+  Toolbar: styled.div`
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 100;
+  `,
+
+  MainBar: styled.div`
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+
+    .search-container {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      background: #f1f5f9;
+      border-radius: 8px;
+      padding: 0 12px;
+      border: 1px solid #e2e8f0;
+      input {
+        border: none;
+        background: transparent;
+        height: 40px;
         width: 100%;
-        box-sizing: border-box;
-        font-family: 'Inter', sans-serif;
-    `,
-    FormSub: styled.div`
-        width: 100%;
-        background: #ffffff;
-        border-radius: 12px;
-        border: 1px solid #e6eeec;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    `,
-    CamposInput: styled.div`
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 16px 20px;
-        border-bottom: 1px solid #f0f4f3;
-        .search-container {
-            position: relative;
-            display: flex;
-            align-items: center;
-            input {
-                width: 280px;
-                height: 38px;
-                padding: 0 12px 0 40px;
-                border-radius: 8px;
-                border: 1.5px solid #d1dbd9;
-                font-size: 0.85rem;
-                outline: none;
-                &:focus { border-color: #26a69a; }
-            }
-            svg {
-                position: absolute;
-                left: 12px;
-                color: #26a69a;
-                font-size: 18px;
-            }
-        }
-    `,
-    TableContainer: styled.div`
-        width: 100%;
-        overflow-x: auto;
-        transform: rotateX(180deg); 
-        /* &::-webkit-scrollbar { height: 6px; }
-        &::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; } */
-    `,
-    Table: styled.table`
-        width: 100%;
-        border-collapse: collapse;
-        min-width: 1300px; 
-        transform: rotateX(180deg); 
-        thead { background-color: #fbfdfc; }
-        th {
-            padding: 12px 16px;
-            font-size: 0.65rem;
-            font-weight: 800;
-            color: #b0c2be;
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid #f0f4f3;
-        }
-        td {
-            padding: 12px 16px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: #2f3d39;
-            border-bottom: 1px solid #f0f4f3;
-        }
-        tbody tr:hover { background-color: #f1f8f7; }
-    `,
-    Chip: styled.div<colorProps>`
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.65rem;
-        font-weight: 800;
-        background-color: ${({ color }) => color + '15'}; 
-        color: ${({ color }) => color};
-        border: 1px solid ${({ color }) => color + '20'};
-        &::before {
-            content: '';
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background-color: ${({ color }) => color};
-        }
-    `,
-    trBTN: styled.div` display: flex; justify-content: flex-end; `,
-    loadingRow: styled.tr` td { padding: 40px; text-align: center; } `,
-    loadingContainer: styled.div` display: flex; flex-direction: column; align-items: center; gap: 10px; color: #26a69a; `,
-    semItens: styled.div` display: flex; flex-direction: column; align-items: center; padding: 40px; color: #b0c2be; `,
-    iconSemItens: styled(MdInbox)` font-size: 40px; `,
-    imagemArea: styled.div` 
-        display: flex; 
-        gap: 20px; 
-        padding: 10px; 
-        width: 100%; 
-        max-width: 800px;
-    `,
-    divArea: styled.div` 
-        flex: 1; 
-        padding: 12px; 
-        border: 1px solid #e6eeec; 
-        border-radius: 12px; 
-        background: #fbfdfc;
-    `,
-    imgem: styled.img` 
-        width: 100%; 
-        height: 250px; 
-        object-fit: cover; 
-        border-radius: 8px; 
-        border: 1px solid #f0f4f3;
-    `
+        outline: none;
+        font-weight: 600;
+        font-size: 0.85rem;
+        color: #1e293b;
+      }
+      svg { color: #94a3b8; font-size: 20px; }
+    }
+  `,
+
+  FloatingFilter: styled.div<{ isOpen: boolean }>`
+    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 380px; 
+    background: #ffffff;
+    flex-direction: column;
+    padding: 20px;
+    box-shadow: -5px 10px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e2e8f0;
+    border-top: none;
+    border-bottom: 4px solid #26a69a;
+    border-bottom-left-radius: 12px;
+    z-index: 101;
+
+    @media (max-width: 600px) {
+      width: 100%;
+      border-bottom-left-radius: 0;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      label { 
+        font-size: 10px; 
+        font-weight: 800; 
+        color: #94a3b8; 
+        text-transform: uppercase; 
+        letter-spacing: 0.5px;
+      }
+    }
+  `,
+
+  TableContainer: styled.div`
+    flex: 1;
+    overflow-y: auto;
+    background: white;
+    scrollbar-width: thin;
+    /* &::-webkit-scrollbar { width: 5px; }
+    &::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; } */
+  `,
+
+  Table: styled.table`
+    width: 100%;
+    border-collapse: collapse;
+    
+    thead {
+      position: sticky;
+      top: 0;
+      background: #f8fafc;
+      z-index: 10;
+    }
+
+    th { 
+      padding: 12px; 
+      font-size: 0.65rem; 
+      color: #64748b; 
+      text-transform: uppercase; 
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      font-weight: 700;
+    }
+
+    td { 
+      padding: 12px; 
+      border-bottom: 1px solid #f1f5f9; 
+      font-size: 0.8rem;
+      color: #1e293b;
+    }
+
+    tr:hover { background: #f9fafb; }
+  `,
+
+  InputData: styled.input`
+    height: 40px;
+    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    font-weight: 700;
+    color: #334155;
+    outline: none;
+    font-family: inherit;
+    width: 100%;
+    cursor: pointer;
+  `,
+
+  BtnAction: styled.button`
+    background: #26a69a;
+    color: white;
+    border: none;
+    height: 42px;
+    border-radius: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    &:hover { background: #1e857b; box-shadow: 0 4px 12px rgba(38, 166, 154, 0.2); }
+    &:active { transform: scale(0.98); }
+  `,
+
+  Chip: styled.span<{ color: string }>`
+    background: ${props => props.color}15;
+    color: ${props => props.color};
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+  `,
+
+  loadingRow: styled.tr`
+    td { text-align: center; padding: 50px; }
+  `,
+
+  trBTN: styled.div`
+    display: flex;
+    justify-content: flex-end;
+  `,
+
+  imagemArea: styled.div`
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  `,
+
+  divArea: styled.div`
+    width: 240px;
+    border: 1px solid #e2e8f0;
+    padding: 10px;
+    border-radius: 10px;
+  `,
+
+  imgem: styled.img`
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+  `,
 };
-
-export default Styles;
