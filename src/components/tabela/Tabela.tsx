@@ -55,9 +55,11 @@ export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }:
                   </div>
                 </div>
               </td>
-               <Template.Badge ativo={item.ativo}>
+               <td>
+                <Template.Badge ativo={item.ativo}>
                   {item?.placaVeiculo}
                 </Template.Badge>
+               </td>
               <td>{item?.dataCriacao && new Date(item.dataCriacao).toLocaleDateString("pt-BR")}</td>
               <td>
                 <Template.TextPrimary style={{ fontSize: '0.8rem' }}>{item?.recorrencia?.nome}</Template.TextPrimary>

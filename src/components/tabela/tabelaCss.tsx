@@ -53,7 +53,7 @@ export default {
     `,
 
   Badge: styled.span<{ ativo: boolean }>`
-        padding: 4px 10px;
+        padding: 4px 5px;
         border-radius: 20px;
         font-size: 0.7rem;
         font-weight: 700;
