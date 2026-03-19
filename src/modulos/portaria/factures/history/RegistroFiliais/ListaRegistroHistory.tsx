@@ -42,8 +42,8 @@ export const ListaRegistroComponent = () => {
 
   // Filtros
   const [busca, setBusca] = useState("");
-  const [statusAberto, setStatusAberto] = useState<any | null>(null); // Filtro Aberto/Fechado
-  const [situacaoEnum, setSituacaoEnum] = useState<string | null>(null); // Filtro Situação (Enum)
+  const [statusAberto, setStatusAberto] = useState<any | null>(null); 
+  const [situacaoEnum, setSituacaoEnum] = useState<string | null>(null); 
   const [selectedFilial, setSelectedFilial] = useState<number | null>(user?.filial);
   const [dataFiltro, setDataFiltro] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -60,9 +60,11 @@ export const ListaRegistroComponent = () => {
   const onSubmit = useCallback(async (pageUnique?: any) => {
     if (loading) return; 
     setLoading(true);
+    
     const situacaoParaEnviar = LISTA_SITUACAO.some(s => s.value === situacaoEnum) 
-    ? situacaoEnum 
-    : null;
+      ? situacaoEnum 
+      : null;
+
     try {
       const resposta = await Api.findAll(
         selectedFilial as any, 
@@ -84,6 +86,17 @@ export const ListaRegistroComponent = () => {
       setShowFilters(false);
     }
   }, [selectedFilial, busca, statusAberto, dataFiltro, situacaoEnum, loading]);
+
+  // Função para Limpar Filtros
+  const handleLimparFiltros = () => {
+    setBusca("");
+    setStatusAberto(null);
+    setSituacaoEnum(null);
+    setSelectedFilial(user?.filial);
+    setDataFiltro("");
+    // Pequeno timeout para garantir que os estados resetaram antes da busca
+    setTimeout(() => onSubmit(0), 100);
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => { onSubmit(); }, 500);
@@ -128,23 +141,13 @@ export const ListaRegistroComponent = () => {
   };
 
   const retornaCorStatus = (status: any) => {
-    // AGUARDANDO ENTRADA -> AZUL (Início do processo)
-    if (status === "AGUARDANDO_ENTRADA") return "#3b82f6"; 
-    
-    // ENTRADA LIBERADA -> VERDE
-    if (status === "ENTRADA_LIBERADA") return "#26a69a";
-    
-    // AGUARDANDO SAÍDA -> LARANJA (Alerta de pátio/ocupação)
-    if (status === "AGUARDANDO_SAIDA") return "#d97706";
-    
-    // SAÍDA LIBERADA -> VERDE (Finalizado com sucesso)
-    if (status === "SAIDA_LIBERADA") return "#26a69a";
-    
-    // RECUSADO OU FECHADO -> VERMELHO (Atenção/Interrupção)
-    if (status === "RECUSADO") return "#ef4444";
-    if (status === "FECHADO_AUTOMATICO") return "#ef4444";
-
-    return "#3b82f6"; // Padrão azul
+    if (status === "AGUARDANDO_ENTRADA") return "#3b82f6"; // AZUL
+    if (status === "ENTRADA_LIBERADA") return "#26a69a";   // VERDE
+    if (status === "AGUARDANDO_SAIDA") return "#d97706";   // LARANJA
+    if (status === "SAIDA_LIBERADA") return "#26a69a";     // VERDE
+    if (status === "RECUSADO") return "#ef4444";           // VERMELHO
+    if (status === "FECHADO_AUTOMATICO") return "#ef4444"; // VERMELHO
+    return "#3b82f6"; 
   };
 
   return (
@@ -160,7 +163,7 @@ export const ListaRegistroComponent = () => {
               <SearchIcon className="icon-search" />
               <input 
                 type="text" 
-                placeholder="Busca por nome ou placa..." 
+                placeholder="Busca..." 
                 value={busca} 
                 onChange={(e) => setBusca(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && onSubmit()}
@@ -209,9 +212,14 @@ export const ListaRegistroComponent = () => {
                 </div>
              </div>
 
-             <Template.BtnAction onClick={() => onSubmit()}>
-                Aplicar Filtros
-             </Template.BtnAction>
+             <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+                <Template.BtnClear onClick={handleLimparFiltros} style={{ flex: 1 }}>
+                    Limpar
+                </Template.BtnClear>
+                <Template.BtnAction onClick={() => onSubmit()} style={{ flex: 1, marginTop: 0 }}>
+                    Aplicar Filtros
+                </Template.BtnAction>
+             </Stack>
           </Template.FloatingFilter>
         </Template.Toolbar>
 
@@ -273,7 +281,6 @@ export const ListaRegistroComponent = () => {
         </Box>
       </Paper>
 
-      {/* MENU DE AÇÕES */}
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
         <MenuItem onClick={() => { navigate(`/portaria/controle/detalhes-registro?order=${itemSelecionado.id}`); handleCloseMenu(); }}>
           <ListItemIcon><VisibilityIcon fontSize="small" /></ListItemIcon>
@@ -289,7 +296,6 @@ export const ListaRegistroComponent = () => {
         </MenuItem>
       </Menu>
 
-      {/* MODAL DE FOTOS/EVIDÊNCIAS */}
       {exibeImagem && (
         <ModalGlobalComponent cancelar={() => setExibeImagem(false)}>
           <Box sx={{ p: 2 }}>
@@ -311,7 +317,6 @@ export const ListaRegistroComponent = () => {
         </ModalGlobalComponent>
       )}
 
-      {/* POPUP DE CONFIRMAÇÃO DE DELETE */}
       {ativo && <PopupComponent handleCancel={() => setAtivo(false)} handleConfirm={handleDelete} message={msg} ativoBtn={true} />}
     </Template.container>
   );

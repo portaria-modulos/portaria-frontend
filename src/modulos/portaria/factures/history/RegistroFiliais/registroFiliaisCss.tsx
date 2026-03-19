@@ -97,8 +97,6 @@ export default {
     overflow-y: auto;
     background: white;
     scrollbar-width: thin;
-    /* &::-webkit-scrollbar { width: 5px; }
-    &::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; } */
   `,
 
   Table: styled.table`
@@ -146,6 +144,22 @@ export default {
     cursor: pointer;
   `,
 
+  // Estilo para o Botão de Limpar
+  BtnClear: styled.button`
+    background: #f1f5f9;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    height: 42px;
+    border-radius: 8px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    &:hover { background: #e2e8f0; color: #1e293b; }
+    &:active { transform: scale(0.98); }
+  `,
+
   BtnAction: styled.button`
     background: #26a69a;
     color: white;
@@ -155,7 +169,6 @@ export default {
     font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
-    margin-top: 20px;
     font-size: 0.75rem;
     transition: all 0.2s;
     &:hover { background: #1e857b; box-shadow: 0 4px 12px rgba(38, 166, 154, 0.2); }
