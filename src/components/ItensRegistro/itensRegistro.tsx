@@ -34,7 +34,7 @@ export const ItensRegistro = ({ lista, hendleDetalhesPedidos, hendleBusca, visib
         if (observerTarget.current) observer.observe(observerTarget.current);
         return () => { if (observerTarget.current) observer.unobserve(observerTarget.current); };
     }, [loading, lista.length, visibleCount, hendleBusca]);
-
+    
 
     const retornaCorStatus = (s: string) => {
         const cores: any = { "AGUARDANDO_ENTRADA": "info", "AGUARDANDO_SAIDA": "warning", "SAIDA_LIBERADA": "success" };
@@ -84,12 +84,7 @@ export const ItensRegistro = ({ lista, hendleDetalhesPedidos, hendleBusca, visib
                                             variant="outlined"
                                         />
                                         {item?.entrada?.dataEntrada &&
-                                            <Template.data><strong>Entrada: </strong>{handleConvetData(item?.entrada?.dataEntrada)}
-                                                {item?.entrada?.filial &&
-                                                    <><strong> -  Filial: </strong> {item?.entrada?.filial}</>
-
-                                        }
-                                            </Template.data>
+                                            <Template.data><strong>Entrada: </strong>{handleConvetData(item?.entrada?.dataEntrada)}</Template.data>
 
                                         }
                                     </Template.AreaStatus>

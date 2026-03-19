@@ -1,151 +1,123 @@
 import {
-    Container
-    , Form,
-    FormSub
-    , Logo,
-    Campos,
-    Or,
-    Erros,
-    Text,
-    Foooter,
-    Select,
-    EsquceuSenha,
-    Input,
-    Password
-} from "./Container"
-import logo from "../../../assets/ptcontroleBanner.png"
+    Container, Form, FormSub, LogoText, Subtitle,
+    Campos, Erros, Foooter, Select, Label,
+    InputWrapper, Password
+} from "./Container";
 import { useForm } from "react-hook-form";
 import { useRef, useState } from "react";
-import salve from "../../../localStorage/service-localStorage"
-import VisibilityIcon from '@mui/icons-material/Visibility';         // 👁️ olho aberto
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';   // 🙈 olho fechado
-import Api from "../../PaginaInicial/service/apiUsuario"
+import salve from "../../../localStorage/service-localStorage";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import Api from "../../PaginaInicial/service/apiUsuario";
 import IconButton from "@mui/material/IconButton";
 import { Button, CircularProgress } from "@mui/material";
-import { SendIcon } from "lucide-react";
 import { AlertComponent } from "../../../components/alert/alertaComponent";
+
 type FormData = {
     email: string;
     password: string;
 };
-// //npm install react-hook-form
+
 export const LoginComponen = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>()
-    const [ativaPasswd, setAtivaPasswd] = useState(false)
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const [ativaPasswd, setAtivaPasswd] = useState(false);
     const [loading, setLoading] = useState(false);
     const [logued, setLogued] = useState(false);
+
     const onSubmit = async (data: FormData) => {
         try {
-            setLoading(true)
+            setLoading(true);
             const resposta = await Api.login(data);
             if (resposta && resposta.acessToken) {
                 salve.salva_token(resposta.acessToken);
                 localStorage.setItem("order", String(resposta.usuario.id));
-                setLogued(true)
-                window.location.href =  "/"
-
+                setLogued(true);
+                window.location.href = "/";
             }
+        } catch (e) {
+            // Adicione um catch para tratar erros de senha/email
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-
     };
+
     const senhaRef = useRef<HTMLInputElement>(null);
-    const focus = (
-        event: React.KeyboardEvent<HTMLInputElement>,
-        nextRef?: React.RefObject<HTMLInputElement | null>
-    ) => {
-        if (event.key === "Enter") {
 
-            if (nextRef) {
-                nextRef?.current?.focus();
-
-            }
-        }
-
-    };
     return (
         <Container>
             <Form>
-                <Logo src={logo} >
+                <header>
+                    <LogoText>Portaria<span>CD</span></LogoText>
+                    <Subtitle>Entre com suas credenciais para acessar o painel</Subtitle>
+                </header>
 
-                </Logo>
-                <Text></Text>
-                <Or></Or>
                 <FormSub onSubmit={handleSubmit(onSubmit)}>
                     <Select>
-                        <Campos
-                            hasError={!!errors.email} type="email"
-                            autoComplete="current-password"
-                            placeholder="@exemplo.com"
-
-                            {...register("email", {
-                                required: "Email E obrigatorio",
-                                pattern: {
-                                    value: /^\S+@\S+$/i,
-                                    message: "Formato de e-mail inválido",
-
-                                }
-                            })}
-                            onKeyDown={(e) => focus(e, senhaRef)}
-                        />
-                        <Erros>
-                            {errors.email && <p>{errors.email.message}</p>}
-                        </Erros>
-                    </Select>
-                    <Select>
-                        <Input hasError={!!errors.password}>
-                            <Password placeholder="Senha"
-                                type={ativaPasswd ? "text" : "password"}
-                                onKeyDown={(e) => focus(e)}
-
-                                autoComplete="current-password"
-                                {...register("password", {
-                                    required: "Senha obrigatória",
+                        <Label>E-mail</Label>
+                        <InputWrapper hasError={!!errors.email}>
+                            <Campos
+                                type="email"
+                                placeholder="nome@exemplo.com"
+                                {...register("email", {
+                                    required: "E-mail é obrigatório",
+                                    pattern: {
+                                        value: /^\S+@\S+$/i,
+                                        message: "Formato de e-mail inválido",
+                                    }
                                 })}
-
                             />
-                            <IconButton onClick={() => setAtivaPasswd(!ativaPasswd)}>
-                                {ativaPasswd ? (<VisibilityOffIcon />) : (<VisibilityIcon />)}
-
-                            </IconButton>
-                        </Input>
-                        <Erros>
-                            {errors.password && <p>{errors.password.message}</p>}
-                        </Erros>
-
+                        </InputWrapper>
+                        {errors.email && <Erros>{errors.email.message}</Erros>}
                     </Select>
-                    <EsquceuSenha>
-                        {/* <Link to={""} >Esqueceu a senha</Link> */}
-                    </EsquceuSenha>
+
+                    <Select>
+                        <Label>Senha</Label>
+                        <InputWrapper hasError={!!errors.password}>
+                            <Password
+                                placeholder="••••••••"
+                                type={ativaPasswd ? "text" : "password"}
+                                {...register("password", {
+                                    required: "Senha é obrigatória",
+                                })}
+                            />
+                            <IconButton
+                                onClick={() => setAtivaPasswd(!ativaPasswd)}
+                                sx={{ color: '#94a3b8' }}
+                            >
+                                {ativaPasswd ? (
+                                    <VisibilityOffIcon sx={{ fontSize: 20 }} />
+                                ) : (
+                                    <VisibilityIcon sx={{ fontSize: 20 }} />
+                                )}
+                            </IconButton>
+                        </InputWrapper>
+                        {errors.password && <Erros>{errors.password.message}</Erros>}
+                    </Select>
+
                     <Button
                         type="submit"
                         variant="contained"
                         fullWidth
-                        size="large"
                         disabled={loading}
-                        endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
-                        sx={{ bgcolor: '#5B7FFF', '&:hover': { bgcolor: '#4a6cf0' } }}
+                        sx={{
+                            height: '48px',
+                            borderRadius: '8px',
+                            textTransform: 'none',
+                            fontSize: '1rem',
+                            fontWeight: 600,
+                            bgcolor: '#5B7FFF',
+                            boxShadow: '0 4px 12px rgba(91, 127, 255, 0.25)',
+                            '&:hover': { bgcolor: '#4a6cf0' }
+                        }}
                     >
-                        {loading ? 'Fazendo Login...' : 'Login'}
+                        {loading ? <CircularProgress size={24} color="inherit" /> : 'Acessar Painel'}
                     </Button>
-                    {logued &&
-                        <AlertComponent titulo={"success"} msg={"Login confirmado"} />
 
-                    }
-
+                    {logued && <AlertComponent titulo={"success"} msg={"Login confirmado"} />}
                 </FormSub>
-
-
-
-
-
             </Form>
-            <Foooter>Portaria - Controle de Acesso</Foooter>
-            {/* {
-                loading && <LoadingSecundary />
 
-            } */}
+            <Foooter>Sistema de Gestão de Portaria &copy; 2026</Foooter>
         </Container>
-    )
+    );
 }

@@ -1,206 +1,120 @@
 import styled from "styled-components";
+
 interface CamposProps {
   hasError?: boolean;
-   cor?:any
 }
+
 export const Container = styled.section`
-display: flex;
-position: relative;
-flex-direction: column;
-align-items: center;
-padding:30px 0;
-
-height:var(--height);
-  @media screen and (min-width: 560px){
-justify-content: center;
-padding:30px 20px;
-
-  width: 100%;
-
-  }
-`;
-export const Img = styled.img` 
-height: 24px;
-margin: 0;
-margin-right: 6rem;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f8fafc; // Fundo levemente acinzentado (Clean)
+  font-family: 'Inter', -apple-system, sans-serif;
 `;
 
 export const Form = styled.div`
-display: flex;
-width: 100%;
-flex-direction: column;
-align-items: center;
-border-radius: 10px;
-padding: 10px 10px;
-gap: 20px;
-  @media screen and (min-width:430px){
-      width: 490px;
-      background-color: #FFF;
-      /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); */
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 48px 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
 
-      padding: 40px 30px;
-
-
-
+  @media (max-width: 480px) {
+    padding: 32px 24px;
+    box-shadow: none;
+    background: transparent;
   }
-
 `;
 
+// Substitui a logo de imagem por Texto Estilizado
+export const LogoText = styled.h1`
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.025em;
+  margin-bottom: 8px;
+  text-align: center;
 
-export const Logo = styled.img`
-font-family:Arial, Helvetica, sans-serif;
-font-weight: bold;
-height: 60px;
-object-fit: contain;
-width: 160px;
-color: var(--cor-titulo);
-cursor: pointer;
- @media screen and (min-width:430px){
-height: 80px;
-width: 200px;
-
-
+  span {
+    color: #5B7FFF; // Destaque na cor principal
   }
-
-
 `;
-export const Btn = styled.button`
-display: flex;
-align-items: center;
-margin: 5px 0;
-padding: 10px 0;
-width: 100%;
-height: 35px;
-border:1px solid #d6d6d6;
-background-color:transparent;
-border-radius: 5px;
-cursor: pointer;
-&:active {
-    transform: scale(0.95);
-    font-size: 12px;
 
-  }
-  &:hover{
-   background-color: #e8eef3;
-
-  }
-
-
-
+export const Subtitle = styled.p`
+  font-size: 0.875rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 32px;
 `;
-export const Campos = styled.input.withConfig({
-  shouldForwardProp: (prop) => prop !== "hasError",
-}) <CamposProps>`
-width: 100%;
-height: 42px;
-border:1px solid #d6d6d6;
-background-color:transparent;
-border-radius: 5px;
-  border: 1px solid ${({ hasError }) => (hasError ? '#ff4d4f' : '#ccc')};
-&:focus {
-    outline: none;
-    border-color: ${({ hasError }) => (hasError ? '#ff4d4f' : '#007BFF')};
-  }
-padding:5px;
 
-
+export const FormSub = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // Espaçamento maior entre campos (UX)
 `;
-export const Password = styled.input`
-width: 100%;
-outline: none;
-border: 0;
 
-
+export const Select = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
 `;
-export const Input = styled.div.withConfig({
-  shouldForwardProp: (prop) => prop !== "hasError",
-})<CamposProps>`
-height: 42px;
-background-color:transparent;
-border-radius: 5px;
-  border: 1px solid ${({ hasError }) => (hasError ? '#ff4d4f' : '#ccc')};
-&:focus {
-    outline: none;
-    border-color: ${({ hasError }) => (hasError ? '#ff4d4f' : '#007BFF')};
-  }
-padding:5px;
 
+export const Label = styled.label`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #334155;
+`;
+
+export const InputWrapper = styled.div<{ hasError?: boolean }>`
   display: flex;
   align-items: center;
-`
-export const Or = styled.div`
+  border: 1px solid ${({ hasError }) => (hasError ? '#ef4444' : '#e2e8f0')};
+  border-radius: 8px;
+  background-color: #fcfdfe;
+  transition: all 0.2s ease;
+  padding-right: 8px;
 
-
-
-`;
-export const BtnLogin = styled.button`
-margin: 5px 0;
-width: 100%;
-height: 35px;
-border:1px solid #d6d6d6;
-background-color:#007BFF;
-border-radius: 5px;
-color: #DDD;
-font-size: 14px;
-font-weight: bold;
-    transition: background-color 0.3s ease;
-
-&:active {
-    transform: scale(0.95);
-    font-size: 12px;
-
+  &:focus-within {
+    border-color: #5B7FFF;
+    box-shadow: 0 0 0 4px rgba(91, 127, 255, 0.1);
+    background-color: #fff;
   }
-  &:hover {
-    background-color: #0056b3;
-    color: white; 
+`;
+
+export const Campos = styled.input`
+  width: 100%;
+  height: 46px;
+  padding: 0 16px;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: #1e293b;
+  outline: none;
+
+  &::placeholder {
+    color: #94a3b8;
   }
-
 `;
-export const Select = styled.div`
-position: relative;
-margin: 5px 0;
 
+export const Password = styled(Campos)``; // Reaproveita estilos
 
-`
-export const Text = styled.div`
-color: blue;
-font-size: 16px;
-font-family: Arial, Helvetica, sans-serif;
-font-weight:400;
-
-`;
-export const FormSub = styled.form`
-width: 100%;
-display: flex;
-flex-direction: column;
-gap: 20px;
-
-`;
-export const Erros = styled.div`
-position: absolute;
-color:#ff4d4f;
- color: #ff4d4f;
-  font-size: 13px;
-  margin: 0 0 10px;
- 
-
+export const Erros = styled.span`
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 4px;
 `;
 
 export const Foooter = styled.footer`
-position: absolute;
-margin: 5px 0;
-color: #888;
-bottom: 0;
-
-
-`
-export const EsquceuSenha = styled.div`
-margin: 5px 0;
-display: flex;
-align-items: center;
-justify-content: end;
-
-
-`
+  position: absolute;
+  bottom: 24px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+`;
