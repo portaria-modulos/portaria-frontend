@@ -17,6 +17,7 @@
     "@mui/material": "^7.3.6",
     "@mui/x-tree-view": "^8.22.0",
     "@react-google-maps/api": "^2.20.7",
+    "@tanstack/react-table": "^8.21.3",
     "axios": "^1.11.0",
     "browser-image-compression": "^2.0.2",
     "canvas-to-blob": "^1.0.0",

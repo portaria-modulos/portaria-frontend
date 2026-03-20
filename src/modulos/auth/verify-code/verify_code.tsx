@@ -12,21 +12,13 @@
 //     Divid,
 //     Or,
 // } from "./verifyCode"
-// import zapdaiLogo from "../../../assets/zapdai.png"
 // import { useState } from "react";
 // import { useNavigate } from "react-router-dom";
-// import salve from "../../../service/localStorage/service-localStorage"
-// import Api from "../../../service/api"
 // import { LoadingSecundary } from "../../../components/LoadingSecundary/LoadingSecundary";
 // import OtpInput from "react-otp-input";
 // import { Btn } from "../../../components/btn/button";
-// import { notify } from "../../../service/snackbarService";
+// import { notify } from "../../portaria/service/snackbarService";
 
-
-// declare const google: any;
-
-// // //npm install react-hook-form
-// google
 // export const Verify_code = () => {
 //     const [otp, setOtp] = useState('');
 //     const queryParams = new URLSearchParams(window.location.search);
@@ -37,17 +29,16 @@
 //         try {
 //             setLoading(true);
 //             const numero = value ?? otp
-//             const resposta = await Api.code_valid(parseInt(numero), token)
-//             const json = await resposta.data
-//             if (json.authToken) {
-//                 salve.salva_token(json.authToken)
-//                 setTimeout(() => {
-//                     navigate("/", { replace: true, state: { refresh: Date.now() } });
-//                     setLoading(false);
+//             // const resposta = await Api.code_valid(parseInt(numero), token)
+//             // const json = await resposta.data
+//             // if (json.authToken) {
+//             //     setTimeout(() => {
+//             //         navigate("/", { replace: true, state: { refresh: Date.now() } });
+//             //         setLoading(false);
 
-//                 }, 1000);
+//             //     }, 1000);
 
-//             }
+//             // }
 //         }
 //         finally {
 //             setTimeout(() => {
@@ -75,30 +66,30 @@
 //     const onSubmitReenvie = async () => {
 //         setLoading(true);
 //         const data = { number: number };
-//         const dataResposta = await Api.code(data as any)
-//         if (dataResposta.token && dataResposta.message) {
-//             notify(dataResposta.message, "success")
-//             const tk = dataResposta.token;
-//             const params = new URLSearchParams({ token: tk, number: number });
-//             setTimeout(() => {
-//                 navigate(`/code?${params.toString()}`, { replace: true, state: { refresh: Date.now() } });
-//                 setLoading(false);
-//             }, 1000);
-//         }
+//         // const dataResposta = await Api.code(data as any)
+//         // if (dataResposta.token && dataResposta.message) {
+//         //     notify(dataResposta.message, "success")
+//         //     const tk = dataResposta.token;
+//         //     const params = new URLSearchParams({ token: tk, number: number });
+//         //     setTimeout(() => {
+//         //         navigate(`/code?${params.toString()}`, { replace: true, state: { refresh: Date.now() } });
+//         //         setLoading(false);
+//         //     }, 1000);
+//         // }
 //     };
 
 //     // criando loading para ir para a rota de login pelo whats
 //     const [loading, setLoading] = useState(false)
 //     const navigate = useNavigate()
 
-//     const handleMarckClick = (e: React.MouseEvent<HTMLImageElement>) => {
-//         e.stopPropagation(); // só pra garantir que o clique não dispare em outro lugar
-//         setLoading(true);
-//         setTimeout(() => {
-//             setLoading(false);
-//             navigate("/marketPlace", { replace: true, state: { refresh: Date.now() } });
-//         }, 2000);
-//     };
+//     // const handleMarckClick = (e: React.MouseEvent<HTMLImageElement>) => {
+//     //     e.stopPropagation(); // só pra garantir que o clique não dispare em outro lugar
+//     //     setLoading(true);
+//     //     setTimeout(() => {
+//     //         setLoading(false);
+//     //         navigate("/marketPlace", { replace: true, state: { refresh: Date.now() } });
+//     //     }, 2000);
+//     // };
 //     // useEffect(() => {
 //     //     setTimeout(() => {
 //     //         console.log("parou")
@@ -110,11 +101,11 @@
 //     return (
 //         <Container>
 //             <Form>
-//                 <Logo src={zapdaiLogo} onClick={handleMarckClick} />
+//                 {/* <Logo src={zapdaiLogo} onClick={handleMarckClick} /> */}
 //                 <Text>Olá, Seja bem-vindo</Text>
 //                 {/* <Or>OR</Or> */}
 //                 <FormSub>
-//                     <Titulo>Informe o codigo enviado ao seu telefone! {'*******' + number.slice(0 - 4)}.</Titulo>
+//                     <Titulo>Informe o codigo enviado ao seu email! {'*******'}.</Titulo>
 
 //                     <Select>
 //                         {/* <Cod>Informe o codigo</Cod> */}
@@ -189,7 +180,6 @@
 
 
 //             </Form>
-//             <Foooter>zapdai</Foooter>
 //             {
 //                 loading && <LoadingSecundary />
 

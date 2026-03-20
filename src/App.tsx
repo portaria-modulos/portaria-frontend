@@ -57,7 +57,8 @@ const App = () => {
               </ProtectedRoute>
             } />
             <Route index path="verify" element={<LoadingR />} />
-            <Route index path="/login" element={<LoginComponen />} />I
+            <Route index path="/login" element={<LoginComponen />} />
+            {/* <Route  path="/code" element={<Verify_code/>} /> */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="*" element={<NotFund />} />
           </Routes>

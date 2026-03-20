@@ -52,127 +52,102 @@ export default {
     position: absolute;
     top: 100%;
     right: 0;
-    width: 380px; 
+    width: 320px; 
     background: #ffffff;
     flex-direction: column;
     padding: 20px;
     box-shadow: -5px 10px 25px rgba(0,0,0,0.1);
     border: 1px solid #e2e8f0;
-    border-top: none;
     border-bottom: 4px solid #26a69a;
     border-bottom-left-radius: 12px;
     z-index: 101;
+    gap: 12px;
 
-    @media (max-width: 600px) {
-      width: 100%;
-      border-bottom-left-radius: 0;
-    }
-
-    .filter-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .full-width {
-      grid-column: span 2;
-    }
-
-    .filter-item {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      label { 
-        font-size: 10px; 
-        font-weight: 800; 
-        color: #94a3b8; 
-        text-transform: uppercase; 
-        letter-spacing: 0.5px;
-      }
+    .MuiFormControl-root {
+      width: 100% !important;
+      margin: 0 !important;
     }
   `,
 
-  TableContainer: styled.div`
-    flex: 1;
-    overflow-y: auto;
-    background: white;
-    scrollbar-width: thin;
+  FilterGroup: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   `,
 
-  Table: styled.table`
-    width: 100%;
-    border-collapse: collapse;
-    
-    thead {
-      position: sticky;
-      top: 0;
-      background: #f8fafc;
-      z-index: 10;
-    }
-
-    th { 
-      padding: 12px; 
-      font-size: 0.65rem; 
-      color: #64748b; 
-      text-transform: uppercase; 
-      border-bottom: 1px solid #e2e8f0;
-      text-align: left;
-      font-weight: 700;
-    }
-
-    td { 
-      padding: 12px; 
-      border-bottom: 1px solid #f1f5f9; 
-      font-size: 0.8rem;
-      color: #1e293b;
-    }
-
-    tr:hover { background: #f9fafb; }
+  FilterLabel: styled.label`
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-left: 2px;
   `,
 
   InputData: styled.input`
     height: 40px;
-    padding: 0 10px;
     border-radius: 8px;
     border: 1px solid #e2e8f0;
     background: #f8fafc;
-    font-weight: 700;
-    color: #334155;
-    outline: none;
-    font-family: inherit;
     width: 100%;
-    cursor: pointer;
+    padding: 0 12px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #1e293b;
+    outline: none;
+    box-sizing: border-box;
+    &:focus { border: 2px solid #26a69a; background: #fff; }
   `,
 
-  // Estilo para o Botão de Limpar
-  BtnClear: styled.button`
-    background: #f1f5f9;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
-    height: 42px;
-    border-radius: 8px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-size: 0.75rem;
-    transition: all 0.2s;
-    &:hover { background: #e2e8f0; color: #1e293b; }
-    &:active { transform: scale(0.98); }
+  TableContainer: styled.div`
+    flex: 1;
+    overflow: auto;
+    background: white;
   `,
 
-  BtnAction: styled.button`
-    background: #26a69a;
-    color: white;
-    border: none;
-    height: 42px;
-    border-radius: 8px;
-    font-weight: 800;
-    text-transform: uppercase;
-    cursor: pointer;
-    font-size: 0.75rem;
-    transition: all 0.2s;
-    &:hover { background: #1e857b; box-shadow: 0 4px 12px rgba(38, 166, 154, 0.2); }
-    &:active { transform: scale(0.98); }
+  Table: styled.table`
+    border-collapse: collapse;
+    width: 100%;
+    thead { position: sticky; top: 0; background: #f8fafc; z-index: 10; }
+    th { 
+      position: relative; 
+      padding: 12px 10px; 
+      font-size: 0.65rem; 
+      color: #64748b; 
+      text-transform: uppercase; 
+      border-bottom: 1px solid #e2e8f0; 
+      border-right: 1px solid #f1f5f9; 
+      text-align: left;
+      font-weight: 800;
+
+      .header-content {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+        user-select: none;
+      }
+    }
+    td { 
+      padding: 8px 10px; 
+      border-bottom: 1px solid #f1f5f9; 
+      border-right: 1px solid #f1f5f9; 
+      font-size: 0.78rem; 
+      color: #1e293b; 
+    }
+  `,
+
+  Resizer: styled.div<{ isResizing?: boolean }>`
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background: ${props => props.isResizing ? '#26a69a' : 'transparent'};
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+    z-index: 2;
+    &:hover { background: #26a69a; }
   `,
 
   Chip: styled.span<{ color: string }>`
@@ -185,33 +160,35 @@ export default {
     text-transform: uppercase;
   `,
 
-  loadingRow: styled.tr`
-    td { text-align: center; padding: 50px; }
-  `,
-
-  trBTN: styled.div`
-    display: flex;
-    justify-content: flex-end;
-  `,
-
-  imagemArea: styled.div`
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-  `,
-
-  divArea: styled.div`
-    width: 240px;
+  BtnClear: styled.button`
+    background: #f1f5f9;
+    color: #64748b;
     border: 1px solid #e2e8f0;
-    padding: 10px;
-    border-radius: 10px;
+    height: 42px;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.75rem;
+    flex: 1;
+    &:hover { background: #e2e8f0; }
   `,
 
-  imgem: styled.img`
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 6px;
+  BtnAction: styled.button`
+    background: #26a69a;
+    color: white;
+    border: none;
+    height: 42px;
+    border-radius: 8px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 0.75rem;
+    flex: 1;
+    &:hover { background: #1f8a7f; }
   `,
+
+  trBTN: styled.div` display: flex; justify-content: flex-end; `,
+  loadingRow: styled.tr` td { text-align: center; padding: 50px; } `,
+  imagemArea: styled.div` display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; `,
+  divArea: styled.div` width: 240px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; `,
+  imgem: styled.img` width: 100%; height: 180px; object-fit: cover; border-radius: 6px; `
 };
