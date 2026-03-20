@@ -4,6 +4,8 @@ import { Avatar, IconButton } from "@mui/material";
 import { subjet } from "../../jwt/jwtservice";
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import { CarIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface TableProps {
   lista: any[];
@@ -15,7 +17,7 @@ interface TableProps {
 export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }: TableProps) => {
   const user = subjet();
   const permission = user?.permissoes;
-
+  const navigate = useNavigate()
   if (loading) {
     return (
       <Template.LoadingArea>
@@ -24,7 +26,9 @@ export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }:
       </Template.LoadingArea>
     );
   }
-
+ const handleFiltraEntradas = (idVisitante:any)=>{
+         navigate(`/portaria/active/entradaVisitante/${idVisitante}`)
+  }
   return (
     <Template.TableContainer>
       <Template.Table>
@@ -74,6 +78,9 @@ export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }:
                       </IconButton>
                       <IconButton size="small" onClick={() => handleDelete(item?.id)} sx={{ color: '#94a3b8', '&:hover': { color: '#1e293b' } }}>
                         <DeleteIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small" onClick={() => handleFiltraEntradas(item?.id)} sx={{ color: '#94a3b8', '&:hover': { color: '#1e293b' } }}>
+                        <CarIcon fontSize="small" />
                       </IconButton>
                     </>
                   ) : (

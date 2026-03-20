@@ -69,7 +69,6 @@ export const VisitantesListaComponets = () => {
   const handleNextPage = (_: ChangeEvent<unknown>, value: number) => {
     onSubmit(value - 1);
   };
-
   return (
     <Template.container>
       <Template.titulo>Gerenciamento de Visitantes</Template.titulo>

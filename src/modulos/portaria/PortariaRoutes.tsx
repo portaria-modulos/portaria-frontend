@@ -14,6 +14,7 @@ import { VisitantesListaComponets } from "./factures/Visitantes/visitantes";
 import { ConfiguracaoComponent } from "./factures/config/config";
 import { ListahistoryComponent } from "./factures/history/lista/ListaHistory";
 import { MeuPerfil } from "../PaginaInicial/factures/meu_perfil/meu_Perfil";
+import { ListaEntradasVisitantes } from "./factures/history/entradaVisitante/ListaRegistroHistory";
 function PortariaRoutes() {
     const perfil = subjet()
     function lazyWidth<T extends ComponentType>
@@ -47,6 +48,12 @@ function PortariaRoutes() {
                 <Route path="gerais" element={
                     <ProtectedRoute allowedPermissions={["GERENCIAR_REGISTROS"]}>
                         <ListaRegistroComponent key={Date.now()}
+                        />
+                    </ProtectedRoute>
+                } />
+                 <Route path="entradaVisitante/:id" element={
+                    <ProtectedRoute allowedPermissions={["GERENCIAR_REGISTROS"]}>
+                        <ListaEntradasVisitantes key={Date.now()}
                         />
                     </ProtectedRoute>
                 } />

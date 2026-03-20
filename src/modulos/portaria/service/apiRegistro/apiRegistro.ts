@@ -29,6 +29,17 @@ const salvaRegistro = async (endpoint: string, data: any, file?: File) => {
   });
   return response.data;
 }
+const buscaVisitanteID = async(endpoint:any,id:any,dataAntes:any,dataDepois:any)=>{
+    const params:any = {
+        sort:"status,asc"
+    }
+    if(id) params.visitanteId = id;
+    if(dataAntes!=null) params.dataAntes = dataAntes;
+    if(dataDepois!=null) params.dataDepois = dataDepois;
+    params.size=100
+    const json = await axios.get(base+endpoint,{params});
+    return json.data;
+}
 export default {
     findAll:async (filial:number,busca:any,ativo:any,page:any,data:any,situacaoEnum:any)=>{
         const json = await findAll("/portaria/v1/findAll",filial,busca,ativo,page,data,situacaoEnum);
@@ -37,5 +48,9 @@ export default {
      RegistroFactory: async (data: any, file?: File) => {
     const json = await salvaRegistro("/portaria/v1/factory", data, file)
     return json;
+  },
+  buscaEntradaUnicaVisitante:async (id:any,dataAntes:any,dataDepois:any)=>{
+        const json = await buscaVisitanteID("/portaria/v1/entrada-vistante",id,dataAntes,dataDepois);
+        return json;
   },
 }
