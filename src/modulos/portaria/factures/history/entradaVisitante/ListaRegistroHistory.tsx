@@ -24,13 +24,11 @@ import {
 } from "@tanstack/react-table";
 import { ModalGlobalComponent } from "../../../../../components/modalGlobal/modalGlobalComponent";
 import { Paginator } from "../../../../../components/paginator/paginator";
-import { useNavigate, useParams, useRoutes } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SelectVariants from "../../../../../components/select/selectFiltro";
 import { PopupComponent } from "../../../../../components/popup/popupComponent";
 import { subjet } from "../../../../../jwt/jwtservice";
 import { Avatar, Box, CircularProgress, IconButton, Paper, Stack, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
-import apiUsuario from "../../../../PaginaInicial/service/apiUsuario";
-
 const LISTA_SITUACAO = [
   { nome: "Aguardando Entrada", value: "AGUARDANDO_ENTRADA" },
   { nome: "Entrada Liberada", value: "ENTRADA_LIBERADA" },
@@ -49,12 +47,9 @@ export const ListaEntradasVisitantes = () => {
   const [lista, setLista] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [totaPage, setTotalPage] = useState(0);
-  const [filiais, setFiliais] = useState<any[]>([]);
-
   const [busca, setBusca] = useState("");
   const [statusAberto, setStatusAberto] = useState<any | null>(null); 
   const [situacaoEnum, setSituacaoEnum] = useState<string | null>(null); 
-  const [selectedFilial, setSelectedFilial] = useState<number | null>(user?.filial);
   const [dataFiltro, setDataFiltro] = useState("");
   const [dataAntes, setDataDepois] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -70,7 +65,7 @@ export const ListaEntradasVisitantes = () => {
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  const onSubmit = useCallback(async (pageUnique?: any) => {
+  const onSubmit = useCallback(async (___pageUnique?: any) => {
     if (loading) return; 
     setLoading(true);
     try {
@@ -81,16 +76,13 @@ export const ListaEntradasVisitantes = () => {
       }
     } catch (error) { console.error(error); }
     finally { setLoading(false); setShowFilters(false); }
-  }, [selectedFilial, busca, statusAberto, dataFiltro, situacaoEnum, loading]);
+  }, [busca, statusAberto, dataFiltro, situacaoEnum, loading]);
 
   useEffect(() => {
     const handler = setTimeout(() => { onSubmit(); }, 500);
     return () => clearTimeout(handler);
   }, [busca]);
 
-  useEffect(() => {
-    apiUsuario.FiliaisUsuario(user?.id).then(res => { if (res?.acess) setFiliais(res.acess); });
-  }, [user?.id]);
 
   const handleOpenMenu = (event: MouseEvent<HTMLElement>, row: any) => {
     setAnchorEl(event.currentTarget);
