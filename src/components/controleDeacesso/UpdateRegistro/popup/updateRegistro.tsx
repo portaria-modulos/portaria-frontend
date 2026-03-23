@@ -127,7 +127,7 @@ const [filiais,setListaFiliais]= useState([])
         <Template.content>
            <Template.CamposInput>
             <Template.label>Portaria Filial</Template.label>
-            <Template.SelectItens {...register("filialSolicitado")} value={data.filialSocitado} onChange={e => setValue("bloco", e.target.value)}>
+            <Template.SelectItens {...register("filialSolicitado")}  onChange={e => setValue("filialSolicitado", e.target.value)}>
               
               {filiais.some((b:any) => b.filial === data.filialSocitado) ? null : (
               
@@ -138,7 +138,7 @@ const [filiais,setListaFiliais]= useState([])
               )}
 
               {filiais.map((item:any) => (
-                <Template.Options key={item.id} value={item.nome.toUpperCase()}>
+                <Template.Options key={item.id} value={item?.numeroFilial}>
                   {item.nome}
                 </Template.Options>
               ))}
