@@ -106,10 +106,11 @@ const atualizaCadastro = async (endpoint: string, body: any) => {
     }
   }
 }
-const listaVisistante = async (endpoint: string, busca: string,page:any) => {
+const listaVisistante = async (endpoint: string, busca: string,page:any,selectedFilial:any) => {
   const params = new URLSearchParams();
   params.append("busca", busca)
-  params.append("size","100")
+  params.append("size","150")
+  if(selectedFilial) params.append("filial",selectedFilial)
    if (page !== undefined && page !== null) {
       params.append("page", page)
     }
@@ -180,8 +181,8 @@ const api = {
     const json = await atualizaCadastro("/portaria/v1/update", data)
     return json;
   },
-  listaVisistante: async (busca: string,page:any) => {
-    const json = await listaVisistante("/visitante/lista", busca,page)
+  listaVisistante: async (busca: string,page:any,selectedFilial:any) => {
+    const json = await listaVisistante("/visitante/lista", busca,page,selectedFilial)
     return json;
   },
   listHistory: async (busca: string, page: any) => {

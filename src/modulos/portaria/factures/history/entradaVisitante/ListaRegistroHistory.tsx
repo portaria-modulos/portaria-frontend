@@ -202,7 +202,7 @@ export const ListaEntradasVisitantes = () => {
     getSortedRowModel: getSortedRowModel(),
     columnResizeMode: "onChange",
   });
-
+  const hoje = new Date().toISOString().split("T")[0];
   return (
     <Template.container>
       <Typography sx={{ fontSize: '1.25rem', fontWeight: 800, color: '#1a1a1a', mb: 1 }}>Histórico Portaria</Typography>
@@ -226,7 +226,6 @@ export const ListaEntradasVisitantes = () => {
           <Template.FloatingFilter isOpen={showFilters}>
               <Template.FilterGroup>
                 <Template.FilterLabel>Status do Registro</Template.FilterLabel>
-                <SelectVariants value={statusAberto} onChange={setStatusAberto} titulo={undefined} list={[{ nome: "Aberto", value: true }, { nome: "Fechado", value: false }]} />
               </Template.FilterGroup>
 
               <Template.FilterGroup>
@@ -239,7 +238,7 @@ export const ListaEntradasVisitantes = () => {
               </Template.FilterGroup>
               <Template.FilterGroup>
                 <Template.FilterLabel>Data depois</Template.FilterLabel>
-                <Template.InputData type="date" value={dataFiltro} onChange={(e:any) => setDataFiltro(e.target.value)} />
+                <Template.InputData type="date" max={hoje} value={dataFiltro} onChange={(e:any) => setDataFiltro(e.target.value)} />
               </Template.FilterGroup>           
              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                 <Template.BtnClear onClick={() => {setBusca(""); setStatusAberto(null); setSituacaoEnum(null); setDataFiltro("");}}>Limpar</Template.BtnClear>

@@ -40,6 +40,7 @@ export type RegistroVisitante = {
   filial: string,
   entrada: Entrada,
   saida: Saida,
+  filialSocitado?:any,
   prioridadeAtrasoAtivo?: boolean,
   prioridadeAviso?: any,
   prioridadeAtraso?: any

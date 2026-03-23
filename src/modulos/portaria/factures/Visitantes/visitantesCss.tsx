@@ -69,6 +69,7 @@ export default {
         padding: 20px;
         border-bottom: 1px solid #e2e8f0;
         flex-wrap: wrap;
+        position: relative;
         gap: 16px;
     `,
 

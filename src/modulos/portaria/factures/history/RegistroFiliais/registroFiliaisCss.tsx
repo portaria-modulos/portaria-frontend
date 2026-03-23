@@ -186,9 +186,12 @@ export default {
     &:hover { background: #1f8a7f; }
   `,
 
-  trBTN: styled.div` display: flex; justify-content: flex-end; `,
-  loadingRow: styled.tr` td { text-align: center; padding: 50px; } `,
-  imagemArea: styled.div` display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; `,
+  trBTN: styled.div`
+   display: flex; justify-content: flex-end; `,
+  loadingRow: styled.tr` 
+  td { text-align: center; padding: 50px; } `,
+  imagemArea: styled.div`
+   display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; `,
   divArea: styled.div` width: 240px; border: 1px solid #e2e8f0; padding: 10px; border-radius: 10px; `,
   imgem: styled.img` width: 100%; height: 180px; object-fit: cover; border-radius: 6px; `
 };

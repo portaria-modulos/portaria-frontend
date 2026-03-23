@@ -35,7 +35,8 @@ export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }:
         <thead>
           <tr>
             <th>Status</th>
-            <th>Visitante</th>
+            <th>Nome</th>
+            <th>Filial/Visita</th>
             <th>Placa</th>
             <th>Data Cadastro</th>
             <th>Tipo / Ocupação</th>
@@ -58,6 +59,11 @@ export const TableComponent = ({ lista, handleDelete, handleBloqueio, loading }:
                     <Template.TextSecondary>{item?.numeroTelefone || "(00) 00000-0000"}</Template.TextSecondary>
                   </div>
                 </div>
+              </td>
+              <td>
+                  <div>
+                    <Template.TextPrimary>{item?.filial}</Template.TextPrimary>
+                  </div>
               </td>
                <td>
                 <Template.Badge ativo={item.ativo}>
