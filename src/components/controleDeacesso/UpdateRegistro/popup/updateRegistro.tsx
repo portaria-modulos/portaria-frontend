@@ -22,7 +22,7 @@ type Props = {
 };
 type FormData = {
   id: any;
-  filialSocitado?: any,
+  filialSolicitado?: any,
   nomeCompleto: any
   placaVeiculo: any,
   numeroTelefone: any,
@@ -127,7 +127,7 @@ const [filiais,setListaFiliais]= useState([])
         <Template.content>
            <Template.CamposInput>
             <Template.label>Portaria Filial</Template.label>
-            <Template.SelectItens {...register("filialSocitado")} value={data.filialSocitado} onChange={e => setValue("bloco", e.target.value)}>
+            <Template.SelectItens {...register("filialSolicitado")} value={data.filialSocitado} onChange={e => setValue("bloco", e.target.value)}>
               
               {filiais.some((b:any) => b.filial === data.filialSocitado) ? null : (
               
