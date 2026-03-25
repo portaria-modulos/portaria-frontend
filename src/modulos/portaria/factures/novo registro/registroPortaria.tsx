@@ -244,18 +244,18 @@ export const RegistrosPortaria = () => {
                     </Template.AreaBuscaPlaca>
                 }
                 {modo === "SLIDER" && (
-                        <SlidePortariaComponent
-                            visitante={{
-                                id: visitante.id,
-                                nomeCompleto: visitante?.nomeCompleto,
-                                imagem: visitante?.imagem,
-                                tipoPessoa: visitante?.tipoPessoa,
-                                categoriaAcesso: visitante?.recorrencia?.nome,
-                                placaVeiculo: visitante?.placaVeiculo,
-                                numeroTelefone: visitante?.numeroTelefone
-                            }}
-                            tipo={() => setModo("BUSCA")}
-                        />
+                    <SlidePortariaComponent
+                        visitante={{
+                            id: visitante.id,
+                            nomeCompleto: visitante?.nomeCompleto,
+                            imagem: visitante?.imagem,
+                            tipoPessoa: visitante?.tipoPessoa,
+                            categoriaAcesso: visitante?.recorrencia?.nome,
+                            placaVeiculo: visitante?.placaVeiculo,
+                            numeroTelefone: visitante?.numeroTelefone
+                        }}
+                        tipo={() => setModo("BUSCA")}
+                    />
                 )}
                 {modo === "CADASTRO" &&
                     <Template.container>

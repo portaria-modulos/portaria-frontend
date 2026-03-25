@@ -73,7 +73,6 @@ export const VisitantesListaComponets = () => {
     onSubmit(value - 1);
   };
 
-  const [statusAberto, setStatusAberto] = useState<any | null>(null);
   const [selectedFilial, setSelectedFilial] = useState<number | null>(user?.filial);
   const [showFilters, setShowFilters] = useState(false);
   return (
@@ -107,11 +106,10 @@ export const VisitantesListaComponets = () => {
           <Template.ButtonNovo onClick={() => navigate("/portaria/controle/registro-portaria-cd")}>
             <span>+</span> Novo Visitante
           </Template.ButtonNovo>
-
             <Filtro selectedFilial={selectedFilial}
             setSelectedFilial={setSelectedFilial}
             showFilters={showFilters}
-            setStatusAberto={setStatusAberto} onSubmit={onSubmit} setBusca={setBusca} />
+            setStatusAberto={()=>(null)} onSubmit={onSubmit} setBusca={setBusca} />
         </Template.HeaderTable>
 
         {loading ? (

@@ -9,6 +9,8 @@ import BlocosApi from "../../../service/api_secundaria"
 import { notify } from "../../../service/snackbarService";
 import { BtnGlobal } from "../../../../../components/btnGlobal/btnGlobal";
 import apiUsuario from "../../../../PaginaInicial/service/apiUsuario";
+import DropPrincipal from "../../../../../components/DropPrincipal/ImageDropZone";
+import { useNavigate } from "react-router-dom";
 
 // import DropPrincipal from "../../components/DropPrincipal/ImageDropZone";
 
@@ -58,6 +60,12 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
             globalAtivo: "false",   // ou "true"
         }
     })
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [resetCounter, setResetCounter] = useState(0);
+    const handleFileSelect = (file: File | null) => {
+        setSelectedFile(file);
+    };
+    const nav = useNavigate()
     const [recorrencia, setRecorrencia] = useState<any[]>([])
     const usuario = subjet()
     const permissions: string[] = usuario?.permissoes || [];
@@ -86,11 +94,14 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                 notify("Selecione a filial da Solicitação", "error")
                 return;
             }
-            const resposta = await Api.RegistroFactory(data);
+            const resposta = await Api.RegistroFactory(data,selectedFile as any);
             if (resposta) {
                 setbloqueioBTN(false)
                 notify(resposta.msg, "success")
                 reset()
+                setResetCounter(prev => prev + 1)
+                nav("/portaria/controle/meus-registros")
+               
 
             }
         } finally {
@@ -294,6 +305,9 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                                     <Template.label>OBS</Template.label>
                                     <Template.TextArea {...register("descricao")}></Template.TextArea>
                                 </Template.CamposInput>
+                                <Template.label>IMG visitante<Resize>*</Resize></Template.label>
+                                <DropPrincipal onFileSelect={handleFileSelect} titulo={"Clique ou arraste outra imagem para substituir"} resetSignal={resetCounter} permission={tipoAcesso?.toUpperCase()} />
+                                {selectedFile && <p>Arquivo selecionado: {selectedFile.name}</p>}
                             </Template.Select>
 
                         </Template.FormSub>
