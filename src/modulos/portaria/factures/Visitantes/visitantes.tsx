@@ -108,12 +108,10 @@ export const VisitantesListaComponets = () => {
             <span>+</span> Novo Visitante
           </Template.ButtonNovo>
 
-          {statusAberto &&
             <Filtro selectedFilial={selectedFilial}
             setSelectedFilial={setSelectedFilial}
             showFilters={showFilters}
             setStatusAberto={setStatusAberto} onSubmit={onSubmit} setBusca={setBusca} />
-          }
         </Template.HeaderTable>
 
         {loading ? (
