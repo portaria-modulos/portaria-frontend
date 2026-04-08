@@ -28,7 +28,7 @@ import { useNavigate } from "react-router-dom";
 import SelectVariants from "../../../../../components/select/selectFiltro";
 import { PopupComponent } from "../../../../../components/popup/popupComponent";
 import { subjet } from "../../../../../jwt/jwtservice";
-import { Avatar, Box, CircularProgress, IconButton, Paper, Stack, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
+import {Box, CircularProgress, IconButton, Paper, Stack, Typography, Menu, MenuItem, ListItemIcon, ListItemText } from "@mui/material";
 import apiUsuario from "../../../../PaginaInicial/service/apiUsuario";
 
 const LISTA_SITUACAO = [
@@ -82,11 +82,11 @@ const getAvatarColor = (name: string) => {
   return avatarColors[Math.abs(hash) % avatarColors.length];
 };
 
-const formatDate = (dateStr: string) => {
-  if (!dateStr) return "---";
-  const d = new Date(dateStr);
-  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
-};
+// const formatDate = (dateStr: string) => {
+//   if (!dateStr) return "---";
+//   const d = new Date(dateStr);
+//   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
+// };
 
 export const ListaRegistroComponent = () => {
   const navigate = useNavigate();
