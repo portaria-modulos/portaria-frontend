@@ -17,34 +17,40 @@ const Template = {
   SelectGroup: styled.div`
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
     width: 100%;
   `,
 
   Label: styled.label`
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #444;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #64748b;
     font-family: "Inter", sans-serif;
+    letter-spacing: 0.2px;
   `,
 
   Select: styled.select`
     width: 100%;
-    height: 48px; /* Altura confortável para mobile */
+    height: 44px;
     padding: 0 12px;
     border-radius: 8px;
-    border: 1.5px solid #e1e1e1;
-    background: #fafafa;
-    font-size: 16px; /* Evita zoom chato no iPhone */
-    color: #333;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 16px;
+    font-family: "Inter", sans-serif;
+    color: #334155;
     outline: none;
     transition: all 0.2s ease;
     cursor: pointer;
 
+    &::placeholder {
+      color: #94a3b8;
+    }
+
     &:focus {
-      border-color: #007BFF;
+      border-color: #6366f1;
       background: #fff;
-      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
 
     @media (min-width: 768px) {
@@ -54,7 +60,6 @@ const Template = {
     }
   `,
 
-  // Container para envolver o componente se necessário
   Container: styled.div`
     width: 100%;
     max-width: 1100px;

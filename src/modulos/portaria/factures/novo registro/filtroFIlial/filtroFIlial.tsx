@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Template from "./Dashboard.css";
 
 interface Props {
@@ -7,24 +8,25 @@ interface Props {
 }
 
 export function FiltroFIlialUsuario({ listaFiliais, carregarDadosLogistico, filialUsuario }: Props) {
+    const [selected, setSelected] = useState<string>(filialUsuario ? String(filialUsuario) : "");
+
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const valor = e.target.value;
+        setSelected(valor);
+        carregarDadosLogistico(valor);
+    };
+
     return (
         <Template.FilterArea>
             <Template.SelectGroup>
                 <Template.Label>Portaria Filial</Template.Label>
                 <Template.Select
-                    onChange={(e) => carregarDadosLogistico(e.target.value)}
+                    value={selected}
+                    onChange={handleChange}
                 >
-                    {listaFiliais.some(s => s.filial == filialUsuario) ? (
-                        <option value={filialUsuario}>
-                            {/* Filtramos o array, pegamos o primeiro item [0] e acessamos o nome */}
-                            {listaFiliais.find(e => e.filial == filialUsuario)?.nome || filialUsuario}
-                        </option>
-                    ) : (
-                        <option value="">Selecione uma Filial</option>
-                    )}
-
+                    <option value="">Selecione uma Filial</option>
                     {listaFiliais.map((f, i) => (
-                        <option key={i} value={f?.filial}>
+                        <option key={i} value={String(f?.filial)}>
                             {f?.filial} - {f?.nome}
                         </option>
                     ))}

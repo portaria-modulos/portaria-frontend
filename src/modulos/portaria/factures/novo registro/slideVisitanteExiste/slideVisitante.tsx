@@ -11,6 +11,7 @@ import { BtnGlobal } from "../../../../../components/btnGlobal/btnGlobal";
 import apiUsuario from "../../../../PaginaInicial/service/apiUsuario";
 import DropPrincipal from "../../../../../components/DropPrincipal/ImageDropZone";
 import { useNavigate } from "react-router-dom";
+import { FiltroFIlialUsuario } from "../filtroFIlial/filtroFIlial";
 
 // import DropPrincipal from "../../components/DropPrincipal/ImageDropZone";
 
@@ -55,7 +56,7 @@ export const ocupacoesLiberada = [
 ];
 export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
 
-    const { register, handleSubmit, formState: { errors }, reset, watch } = useForm<FormData>({
+    const { register, handleSubmit, formState: { errors }, reset, watch,setValue} = useForm<FormData>({
         defaultValues: {
             globalAtivo: "false",   // ou "true"
         }
@@ -94,14 +95,14 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                 notify("Selecione a filial da Solicitação", "error")
                 return;
             }
-            const resposta = await Api.RegistroFactory(data,selectedFile as any);
+            const resposta = await Api.RegistroFactory(data, selectedFile as any);
             if (resposta) {
                 setbloqueioBTN(false)
                 notify(resposta.msg, "success")
                 reset()
                 setResetCounter(prev => prev + 1)
                 nav("/portaria/controle/meus-registros")
-               
+
 
             }
         } finally {
@@ -197,7 +198,14 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                         <Template.FormSub >
                             <Template.Select>
                                 <Template.leftArea>
-                                    <Template.CamposInput>
+                                    <FiltroFIlialUsuario
+                                        filialUsuario={usuario?.filial}
+                                        listaFiliais={listaFiliais}
+                                        carregarDadosLogistico={(valor) => {
+                                            setValue("filialSolicitado", valor);
+                                        }}
+                                    />
+                                    {/* <Template.CamposInput>
                                         <Template.label >Filial Destino<Resize>*</Resize></Template.label>
                                         <Template.SelectItens {
                                             ...register("filialSolicitado", { required: "Selecione a filial de Destino" })}>
@@ -208,7 +216,7 @@ export const SlidePortariaComponent = ({ visitante, tipo }: SlideProps) => {
                                             ))}
                                         </Template.SelectItens>
                                         {errors.bloco && <Template.Erros><p>{errors?.bloco?.message}</p></Template.Erros>}
-                                    </Template.CamposInput>
+                                    </Template.CamposInput> */}
                                 </Template.leftArea>
                                 {/* Select 1  corrigido*/}
                                 <Template.label>Placa Veiculo (Opcional) <Resize></Resize></Template.label>

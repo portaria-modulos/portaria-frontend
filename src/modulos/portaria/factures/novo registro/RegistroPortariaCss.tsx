@@ -9,22 +9,26 @@ export default {
   container_principal: styled.div`
     padding: 15px 10px;
     display: flex;
-    flex-direction: column; // Mobile first: empilha
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     min-height: 100vh;
+    background: #eef2ff;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
     @media (min-width: 768px) {
       padding: 20px;
-      flex-direction: row; // Desktop: alinha
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: center;
     }
   `,
 
   container: styled.div`
     padding: 10px 5px;
     width: 100%;
-    max-width: 850px;
+    max-width: 900px;
 
     @media (min-width: 768px) {
       padding: 20px;
@@ -36,24 +40,25 @@ export default {
     flex-direction: column;
     gap: 10px;
     margin: 0 auto;
-    padding: 10px 15px; // Mobile: menos padding
+    padding: 10px 15px;
     width: 100%;
 
     @media (min-width: 768px) {
-      padding: 10px 56px;
-      max-width: 700px;
+      padding: 10px 30px;
+      max-width: 900px;
     }
   `,
 
   titulo: styled.h1`
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 600;
     margin-bottom: 15px;
-    color: var(--cor-titulo);
+    color: #1e293b;
     text-align: center;
+    font-family: "Inter", sans-serif;
 
     @media (min-width: 768px) {
-      font-size: 24px;
+      font-size: 20px;
       text-align: left;
     }
   `,
@@ -64,64 +69,80 @@ export default {
     gap: 20px;
     width: 100%;
     box-sizing: border-box;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px 15px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8eaf0;
+
+    @media (min-width: 768px) {
+      padding: 28px 32px;
+    }
   `,
 
   FormSub: styled.form`
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
   `,
 
   label: styled.label`
-    font-size: 0.8rem; // Melhor legibilidade no mobile
+    font-size: 0.78rem;
     font-weight: 500;
-    color: var(--cor-texto-campos);
+    color: #64748b;
     font-family: "Inter", sans-serif;
-    letter-spacing: 0.3px;
-    margin-bottom: 6px;
+    letter-spacing: 0.2px;
+    margin-bottom: 5px;
     display: inline-block;
 
     @media (min-width: 768px) {
-       font-size: 0.85rem;    
+       font-size: 0.82rem;
     }
   `,
 
   CamposInput: styled.div`
     width: 100%;
     position: relative;
-    margin: 5px 0;
+    margin: 4px 0;
   `,
 
   Select: styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 10px; 
-    margin: 5px 0;
+    gap: 10px;
+    margin: 4px 0;
   `,
 
   Campos: styled.input.withConfig({
     shouldForwardProp: (prop) => prop !== "hasError",
   }) <CamposProps>`
     width: 100%;
-    height: 45px; // Maior no mobile para facilitar o toque
+    height: 42px;
     border-radius: 8px;
     padding: 0 12px;
-    background-color: #FFF;
-    font-size: 16px; // Evita zoom no iOS
-    border: 1px solid ${({ hasError }) => (hasError ? '#ff4d4f' : '#d6d6d6')};
+    background-color: #fff;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+    color: #334155;
+    border: 1px solid ${({ hasError }) => (hasError ? '#ef4444' : '#d1d5db')};
     transition: all 0.2s ease;
+
+    &::placeholder {
+      color: #94a3b8;
+      font-size: 13px;
+    }
 
     &:focus {
         outline: none;
-        border-color: ${({ hasError }) => (hasError ? '#ff4d4f' : '#007BFF')};
-        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
+        border-color: ${({ hasError }) => (hasError ? '#ef4444' : '#6366f1')};
+        box-shadow: 0 0 0 3px ${({ hasError }) => (hasError ? 'rgba(239,68,68,0.1)' : 'rgba(99,102,241,0.1)')};
     }
 
-    @media (min-width: 768px) {
-      height: 38px;
-      font-size: 14px;
+    @media (max-width: 767px) {
+      height: 44px;
+      font-size: 16px;
     }
   `,
 
@@ -131,42 +152,69 @@ export default {
     gap: 10px;
     margin: 8px 0;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    color: #475569;
+    font-family: "Inter", sans-serif;
   `,
 
   checkbox: styled.input`
     height: 18px;
     width: 18px;
     cursor: pointer;
+    accent-color: #6366f1;
   `,
 
   SelectItens: styled.select<CamposProps>`
     width: 100%;
-    height: 45px;
-    background-color: #FFF;
+    height: 42px;
+    background-color: #fff;
     border-radius: 8px;
     padding: 0 10px;
-    font-size: 16px;
-    border: 1px solid ${({ hasError }) => (hasError ? '#ff4d4f' : '#d6d6d6')};
-    
-    @media (min-width: 768px) {
-      height: 38px;
-      font-size: 14px;
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+    color: #334155;
+    border: 1px solid ${({ hasError }) => (hasError ? '#ef4444' : '#d1d5db')};
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    @media (max-width: 767px) {
+      height: 44px;
+      font-size: 16px;
     }
   `,
 
   TextArea: styled.textarea<CamposProps>`
-    min-height: 100px;
+    min-height: 90px;
     resize: vertical;
     width: 100%;
-    padding: 12px;
-    background-color: #FFF;
+    padding: 10px 12px;
+    background-color: #fff;
     border-radius: 8px;
-    font-size: 16px;
-    border: 1px solid ${({ hasError }) => (hasError ? '#ff4d4f' : '#d6d6d6')};
+    font-size: 14px;
+    font-family: "Inter", sans-serif;
+    color: #334155;
+    border: 1px solid ${({ hasError }) => (hasError ? '#ef4444' : '#d1d5db')};
+    transition: all 0.2s ease;
 
-    @media (min-width: 768px) {
-      font-size: 14px;
+    &::placeholder {
+      color: #94a3b8;
+      font-size: 13px;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    @media (max-width: 767px) {
+      font-size: 16px;
     }
   `,
 
@@ -175,80 +223,87 @@ export default {
   `,
 
   Erros: styled.div`
-    color: #ff4d4f;
-    font-size: 12px;
+    color: #ef4444;
+    font-size: 11px;
     margin-top: 4px;
     font-weight: 500;
+    font-family: "Inter", sans-serif;
   `,
 
   BtnLogin: styled.button`
     margin: 10px 0;
     width: 100%;
-    height: 48px;
-    background-color: #007BFF;
+    height: 44px;
+    background-color: #6366f1;
     border-radius: 8px;
-    color: #FFF;
-    font-size: 16px;
-    font-weight: bold;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: "Inter", sans-serif;
     border: none;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     cursor: pointer;
-    
+
     &:active {
         transform: scale(0.98);
     }
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #4f46e5;
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
     }
 
     @media (min-width: 768px) {
       height: 40px;
-      font-size: 14px;
     }
   `,
 
   leftArea: styled.div`
     width: 100%;
-    padding: 5px 0;
+    padding: 4px 0;
     display: flex;
-    flex-direction: column; // Mobile: empilha
-    gap: 15px;
+    flex-direction: column;
+    gap: 12px;
 
     @media (min-width: 768px) {
-      flex-direction: row; // Desktop: lado a lado
-      gap: 10px;
+      flex-direction: row;
+      gap: 14px;
     }
   `,
 
   btnDivider: styled.div`
     display: flex;
-    flex-direction: column; // Mobile: botões um em cima do outro
+    flex-direction: column;
     width: 100%;
     gap: 10px;
 
     @media (min-width: 768px) {
-      flex-direction: row; // Desktop: lado a lado
+      flex-direction: row;
       align-items: center;
     }
   `,
 
-  // --- COMPONENTES DO SLIDE / DASHBOARD (Mantidos na íntegra) ---
+  // --- COMPONENTES DO SLIDE / DASHBOARD ---
 
   CardCentro: styled.div`
     border-radius: 12px;
-    padding: 15px;
+    padding: 16px;
     margin-bottom: 10px;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8eaf0;
     display: flex;
-    flex-direction: column; // Mobile first
+    flex-direction: column;
 
     @media (min-width: 768px) {
       flex-direction: row;
       justify-content: space-between;
       gap: 20px;
-      padding: 20px;
+      padding: 22px;
       margin-bottom: 20px;
     }
   `,
@@ -302,32 +357,34 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #555;
+    color: #64748b;
     height: 50vh;
-    font-size: 16px;
+    font-size: 15px;
     gap: 10px;
     opacity: 0.8;
+    font-family: "Inter", sans-serif;
   `,
 
   iconSemItens: styled(MdInbox)`
     font-size: 60px;
-    color: #999;
+    color: #94a3b8;
   `,
 
   StatusItem: styled.div<{ active?: boolean }>`
     flex: 1;
     text-align: center;
-    color: ${(props) => (props.active ? "#fff" : "#999")};
-    background: ${(props) => (props.active ? "#4caf50" : "#e0e0e0")};
+    color: ${(props) => (props.active ? "#fff" : "#94a3b8")};
+    background: ${(props) => (props.active ? "#6366f1" : "#e2e8f0")};
     border-radius: 20px;
     padding: 10px;
     margin: 5px;
     font-size: 12px;
     font-weight: 600;
+    font-family: "Inter", sans-serif;
   `,
 
   Button: styled.button`
-    background-color: #4caf50;
+    background-color: #6366f1;
     color: #fff;
     border: none;
     padding: 12px 20px;
@@ -337,14 +394,19 @@ export default {
     width: 100%;
     margin-top: 15px;
     font-weight: 600;
+    font-family: "Inter", sans-serif;
 
     &:active {
       transform: scale(0.97);
     }
+
+    &:hover {
+      background-color: #4f46e5;
+    }
   `,
 
   ItemImage: styled.img`
-    width: 100%; // Mobile: maior destaque
+    width: 100%;
     max-width: 120px;
     aspect-ratio: 1/1;
     object-fit: cover;
@@ -379,27 +441,31 @@ export default {
     align-items: center;
     padding: 10px 15px;
     gap: 10px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #e8eaf0;
   `,
 
   tituloPedido: styled.h4`
     font-size: 14px;
-    color: #1e88e5;
+    color: #6366f1;
     margin: 0;
+    font-family: "Inter", sans-serif;
   `,
 
   p: styled.p`
     font-weight: 600;
     font-size: 14px;
     margin: 4px 0;
+    color: #334155;
+    font-family: "Inter", sans-serif;
   `,
 
   status: styled.div`
     display: flex;
     align-items: center;
     gap: 5px;
-    color: var(--cor-texto-titulo);
+    color: #475569;
     font-size: 13px;
+    font-family: "Inter", sans-serif;
   `,
 
   Image: styled.img`
@@ -418,17 +484,18 @@ export default {
   description: styled.div`
     width: 100%;
     word-wrap: break-word;
-    font-size: 14px;
-    line-height: 1.4;
-    color: #666;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #64748b;
+    font-family: "Inter", sans-serif;
   `,
 
   Label: styled.span`
     font-size: 0.75rem;
-    font-weight: bold;
-    color: #3b004f;
+    font-weight: 600;
+    color: #475569;
     font-family: "Inter", sans-serif;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
 
     @media (min-width: 560px) {
       font-size: 0.8rem;
@@ -439,19 +506,21 @@ export default {
     display: flex;
     flex-direction: column;
     margin: 2em auto;
-    padding: 20px;
+    padding: 24px;
     width: 95%;
     max-width: 500px;
-    font-size: 16px;
-    border-radius: 15px;
-    color: #134c72;
+    font-size: 14px;
+    border-radius: 14px;
+    color: #1e293b;
     background: #fff;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e8eaf0;
     gap: 15px;
+    font-family: "Inter", sans-serif;
 
     @media (min-width: 600px){
       margin: 5em auto;
-      padding: 30px 20px;
+      padding: 30px 24px;
       width: auto;
     }
   `,
@@ -463,19 +532,19 @@ export default {
     padding: 5px;
     transition: 0.2s ease;
     align-items: center;
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
   `,
 
   LabelSubtitulo: styled.span`
     font-family: "Inter", sans-serif;
-    font-weight: 500;
-    color: var(--cor-texto-campos);
+    font-weight: 400;
+    color: #64748b;
     word-wrap: break-word;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
 
     @media (min-width: 560px) {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
     }
   `,
 

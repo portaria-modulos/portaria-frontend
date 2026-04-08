@@ -14,11 +14,11 @@ import AddIcon from '@mui/icons-material/Add';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import SortIcon from '@mui/icons-material/Sort';
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  getSortedRowModel, 
-  flexRender, 
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  flexRender,
   createColumnHelper,
   type SortingState
 } from "@tanstack/react-table";
@@ -42,6 +42,52 @@ const LISTA_SITUACAO = [
 
 const columnHelper = createColumnHelper<any>();
 
+const retornaCorStatus = (status: any) => {
+  const cores: any = {
+    AGUARDANDO_ENTRADA: "#4f46e5",
+    ENTRADA_LIBERADA: "#10b981",
+    AGUARDANDO_SAIDA: "#f59e0b",
+    SAIDA_LIBERADA: "#10b981",
+    RECUSADO: "#ef4444",
+    FECHADO_AUTOMATICO: "#ef4444",
+  };
+  return cores[status] || "#4f46e5";
+};
+
+const retornaLabelStatus = (status: any) => {
+  const labels: any = {
+    AGUARDANDO_ENTRADA: "Aguardando",
+    ENTRADA_LIBERADA: "Liberado",
+    AGUARDANDO_SAIDA: "Em Visita",
+    SAIDA_LIBERADA: "Finalizado",
+    RECUSADO: "Recusado",
+    FECHADO_AUTOMATICO: "Fechado",
+  };
+  return labels[status] || status;
+};
+
+const getInitials = (name: string) => {
+  if (!name) return "?";
+  const parts = name.trim().split(" ");
+  return parts.length > 1
+    ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+    : parts[0][0].toUpperCase();
+};
+
+const avatarColors = ["#4f46e5", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899"];
+const getAvatarColor = (name: string) => {
+  if (!name) return avatarColors[0];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return avatarColors[Math.abs(hash) % avatarColors.length];
+};
+
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return "---";
+  const d = new Date(dateStr);
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
+};
+
 export const ListaRegistroComponent = () => {
   const navigate = useNavigate();
   const user = subjet();
@@ -49,11 +95,12 @@ export const ListaRegistroComponent = () => {
   const [lista, setLista] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [totaPage, setTotalPage] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
   const [filiais, setFiliais] = useState<any[]>([]);
 
   const [busca, setBusca] = useState("");
-  const [statusAberto, setStatusAberto] = useState<any | null>(null); 
-  const [situacaoEnum, setSituacaoEnum] = useState<string | null>(null); 
+  const [statusAberto, setStatusAberto] = useState<any | null>(null);
+  const [situacaoEnum, setSituacaoEnum] = useState<string | null>(null);
   const [selectedFilial, setSelectedFilial] = useState<number | null>(user?.filial);
   const [dataFiltro, setDataFiltro] = useState("");
   const [showFilters, setShowFilters] = useState(false);
@@ -69,13 +116,14 @@ export const ListaRegistroComponent = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const onSubmit = useCallback(async (pageUnique?: any) => {
-    if (loading) return; 
+    if (loading) return;
     setLoading(true);
     try {
       const resposta = await Api.findAll(selectedFilial as any, busca, statusAberto, pageUnique, dataFiltro, situacaoEnum);
       if (resposta) {
         setLista(resposta.content || []);
         setTotalPage(resposta?.totalPages || 0);
+        setTotalElements(resposta?.totalElements || 0);
       }
     } catch (error) { console.error(error); }
     finally { setLoading(false); setShowFilters(false); }
@@ -114,88 +162,144 @@ export const ListaRegistroComponent = () => {
     window.URL.revokeObjectURL(url);
   };
 
-  const retornaCorStatus = (status: any) => {
-    const cores: any = { AGUARDANDO_ENTRADA: "#3b82f6", ENTRADA_LIBERADA: "#26a69a", AGUARDANDO_SAIDA: "#d97706", SAIDA_LIBERADA: "#26a69a", RECUSADO: "#ef4444", FECHADO_AUTOMATICO: "#ef4444" };
-    return cores[status] || "#3b82f6";
-  };
-
   const columns = useMemo(() => [
-    columnHelper.display({
-      id: 'acoes',
-      header: 'Ações',
-      size: 50,
+    columnHelper.accessor('protocolo', {
+      header: 'N°',
+      size: 70,
       cell: info => (
-        <Template.trBTN>
-          <IconButton size="small" onClick={(e) => handleOpenMenu(e, info.row.original)}>
-            <MoreVertIcon sx={{ fontSize: 18 }} />
-          </IconButton>
-        </Template.trBTN>
+        <Typography sx={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.82rem', color: '#4f46e5' }}>
+          #{info.getValue()}
+        </Typography>
       ),
     }),
     columnHelper.accessor('nomeCompleto', {
       header: 'Visitante',
-      size: 250,
+      size: 220,
       cell: info => (
-        <Stack direction="row" spacing={1.5} alignItems="center">
-          <Avatar sx={{ width: 34, height: 34, fontSize: '0.8rem', fontWeight: 700 }} src={info.row.original?.visitante?.imagem} />
-          <Box>
-            <Typography sx={{ fontWeight: 700, fontSize: '0.82rem' }}>{info.getValue() || "---"}</Typography>
-            <Typography sx={{ fontSize: '0.68rem', color: '#4a635d' }}>{info.row.original?.filialSocitado}</Typography>
-          </Box>
-        </Stack>
+        <Typography sx={{ fontWeight: 600, fontSize: '0.82rem', color: '#1a1a2e' }}>
+          {info.getValue() || "---"}
+        </Typography>
       ),
     }),
-    columnHelper.accessor('protocolo', {
-      header: 'Protocolo',
-      size: 100,
-      cell: info => <Typography sx={{ fontFamily: 'monospace', fontWeight: 700, fontSize: '0.75rem', color: '#26a69a' }}>#{info.getValue()}</Typography>,
+    columnHelper.accessor('status', {
+      header: 'Status',
+      size: 120,
+      cell: info => (
+        <Template.StatusBadge color={retornaCorStatus(info.getValue())}>
+          {retornaLabelStatus(info.getValue())}
+        </Template.StatusBadge>
+      ),
     }),
     columnHelper.display({
       id: 'tipoPlaca',
       header: 'Tipo / Placa',
-      size: 140,
+      size: 150,
       cell: info => (
         <Box>
-          <Typography sx={{ fontSize: '0.8rem' }}>{info.row.original?.visitante?.tipoPessoa}</Typography>
-          <Typography sx={{ fontSize: '0.68rem', color: '#26a69a', fontWeight: 800 }}>{info.row.original?.placaVeiculo || "SEM VEÍCULO"}</Typography>
+          <Typography sx={{ fontSize: '0.8rem', fontWeight: 500, color: '#1a1a2e' }}>
+            {info.row.original?.visitante?.tipoPessoa || "---"}
+          </Typography>
+          <Typography sx={{ fontSize: '0.68rem', color: '#4f46e5', fontWeight: 700 }}>
+            {info.row.original?.placaVeiculo || "SEM VEÍCULO"}
+          </Typography>
         </Box>
       ),
     }),
     columnHelper.display({
-      id: 'ocupacaoRecorrencia',
-      header: 'Ocupação / Recorrência',
-      size: 180,
+      id: 'ocupacao',
+      header: 'Ocupação',
+      size: 160,
       cell: info => (
-        <Box>
-          <Typography sx={{ fontSize: '0.8rem' }}>{info.row.original?.ocupacaoLiberada || "---"}</Typography>
-          <Typography sx={{ fontSize: '0.68rem', color: '#4a635d' }}>{info.row.original?.visitante?.recorrencia?.nome || "---"}</Typography>
-        </Box>
+        <Typography sx={{ fontSize: '0.8rem', color: '#1a1a2e' }}>
+          {info.row.original?.ocupacaoLiberada || "---"}
+        </Typography>
       ),
     }),
-    columnHelper.accessor('status', {
-      header: 'Situação',
-      size: 150,
-      cell: info => <Template.Chip color={retornaCorStatus(info.getValue())}>{info.getValue()?.replace(/_/g, " ")}</Template.Chip>,
+    columnHelper.display({
+      id: 'filialInfo',
+      header: 'Filial',
+      size: 140,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.8rem', color: '#1a1a2e' }}>
+          {info.row.original?.filialSocitado || "---"}
+        </Typography>
+      ),
+    }),
+    columnHelper.display({
+      id: 'criador',
+      header: 'Criado Por',
+      size: 140,
+      cell: info => {
+        const nome = info.row.original?.criador?.nome || info.row.original?.nomeCompleto || "---";
+        return (
+          <Template.CreatorCell>
+            <Template.CreatorAvatar color={getAvatarColor(nome)}>
+              {getInitials(nome)}
+            </Template.CreatorAvatar>
+            <Typography sx={{ fontSize: '0.8rem', fontWeight: 600, color: '#1a1a2e' }}>
+              {nome.split(" ")[0]}
+            </Typography>
+          </Template.CreatorCell>
+        );
+      },
+    }),
+    columnHelper.display({
+      id: 'recorrencia',
+      header: 'Recorrência',
+      size: 130,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.78rem', color: '#8e8ea0' }}>
+          {info.row.original?.visitante?.recorrencia?.nome || "---"}
+        </Typography>
+      ),
     }),
     columnHelper.accessor('entrada.dataEntrada', {
       header: 'Data Entrada',
       size: 150,
-      cell: info => <Typography sx={{ fontSize: '0.75rem' }}>{info.getValue() ? new Date(info.getValue()).toLocaleString() : "---"}</Typography>,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.75rem', color: '#1a1a2e' }}>
+          {info.getValue() ? new Date(info.getValue()).toLocaleString() : "---"}
+        </Typography>
+      ),
     }),
     columnHelper.accessor('saida.dataSaida', {
       header: 'Data Saída',
       size: 150,
-      cell: info => <Typography sx={{ fontSize: '0.75rem' }}>{info.getValue() ? new Date(info.getValue()).toLocaleString() : "---"}</Typography>,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.75rem', color: '#1a1a2e' }}>
+          {info.getValue() ? new Date(info.getValue()).toLocaleString() : "---"}
+        </Typography>
+      ),
     }),
     columnHelper.accessor('entrada.nomeFiscal', {
-      header: 'Fisca Entrada',
-      size: 120,
-      cell: info => <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#4a635d' }}>{info.getValue() || "---"}</Typography>,
+      header: 'Fiscal Entrada',
+      size: 130,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#4a635d' }}>
+          {info.getValue() || "---"}
+        </Typography>
+      ),
     }),
     columnHelper.accessor('saida.nomeFiscal', {
       header: 'Fiscal Saída',
-      size: 120,
-      cell: info => <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#4a635d' }}>{info.getValue() || "---"}</Typography>,
+      size: 130,
+      cell: info => (
+        <Typography sx={{ fontSize: '0.75rem', fontWeight: 600, color: '#4a635d' }}>
+          {info.getValue() || "---"}
+        </Typography>
+      ),
+    }),
+    columnHelper.display({
+      id: 'acoes',
+      header: '',
+      size: 50,
+      cell: info => (
+        <Template.trBTN>
+          <IconButton size="small" onClick={(e) => handleOpenMenu(e, info.row.original)}>
+            <MoreVertIcon sx={{ fontSize: 18, color: '#a0a0b8' }} />
+          </IconButton>
+        </Template.trBTN>
+      ),
     }),
   ], []);
 
@@ -211,49 +315,59 @@ export const ListaRegistroComponent = () => {
 
   return (
     <Template.container>
-      <Typography sx={{ fontSize: '1.25rem', fontWeight: 800, color: '#1a1a1a', mb: 1 }}>Histórico Portaria</Typography>
+      <Template.Header>
+        <Template.HeaderLeft>
+          <h1>Histórico Portaria</h1>
+          <span>{totalElements} registro(s)</span>
+        </Template.HeaderLeft>
+        <Template.BtnNovo onClick={() => navigate("/portaria/controle/registro-portaria-cd")}>
+          <AddIcon sx={{ fontSize: 18 }} /> Novo
+        </Template.BtnNovo>
+      </Template.Header>
 
-      <Paper elevation={0} sx={{ borderRadius: '12px', border: '1px solid #e6eeec', overflow: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
+      <Paper elevation={0} sx={{ borderRadius: '12px', border: '1px solid #e8e8ef', overflow: 'hidden', display: 'flex', flexDirection: 'column', flex: 1 }}>
         <Template.Toolbar>
-          <Template.MainBar>
-            <div className="search-container">
-              <SearchIcon />
-              <input type="text" placeholder="Busca por nome, protocolo ou placa..." value={busca} onChange={(e) => setBusca(e.target.value)} />
-            </div>
-            <Stack direction="row" spacing={1}>
-                <IconButton onClick={() => setShowFilters(!showFilters)} sx={{ bgcolor: showFilters ? '#26a69a' : '#f1f5f9', color: showFilters ? 'white' : '#26a69a' }}>
-                    {showFilters ? <CloseIcon fontSize="small" /> : <FilterListIcon fontSize="small" />}
-                </IconButton>
-                <IconButton onClick={() => onSubmit()} sx={{ bgcolor: '#76b0fc', color: 'white' }}><SearchIcon fontSize="small" /></IconButton>
-                <IconButton onClick={()=>navigate("/portaria/controle/registro-portaria-cd") } sx={{ bgcolor: '#2682a6', color: 'white' }}><AddIcon fontSize="small" /></IconButton>
-            </Stack>
-          </Template.MainBar>
+          <Template.SearchContainer>
+            <SearchIcon />
+            <input
+              type="text"
+              placeholder="Buscar por número, nome, placa, filial..."
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+            />
+          </Template.SearchContainer>
+          <Stack direction="row" spacing={1}>
+            <Template.BtnFiltros isOpen={showFilters} onClick={() => setShowFilters(!showFilters)}>
+              {showFilters ? <CloseIcon sx={{ fontSize: 16 }} /> : <FilterListIcon sx={{ fontSize: 16 }} />}
+              Filtros
+            </Template.BtnFiltros>
+          </Stack>
 
           <Template.FloatingFilter isOpen={showFilters}>
-              <Template.FilterGroup>
-                <Template.FilterLabel>Status do Registro</Template.FilterLabel>
-                <SelectVariants value={statusAberto} onChange={setStatusAberto} titulo={undefined} list={[{ nome: "Aberto", value: true }, { nome: "Fechado", value: false }]} />
-              </Template.FilterGroup>
+            <Template.FilterGroup>
+              <Template.FilterLabel>Status do Registro</Template.FilterLabel>
+              <SelectVariants value={statusAberto} onChange={setStatusAberto} titulo={undefined} list={[{ nome: "Aberto", value: true }, { nome: "Fechado", value: false }]} />
+            </Template.FilterGroup>
 
-              <Template.FilterGroup>
-                <Template.FilterLabel>Situação Atual</Template.FilterLabel>
-                <SelectVariants value={situacaoEnum} onChange={setSituacaoEnum} list={LISTA_SITUACAO} titulo={undefined}/>
-              </Template.FilterGroup>
+            <Template.FilterGroup>
+              <Template.FilterLabel>Situação Atual</Template.FilterLabel>
+              <SelectVariants value={situacaoEnum} onChange={setSituacaoEnum} list={LISTA_SITUACAO} titulo={undefined} />
+            </Template.FilterGroup>
 
-              <Template.FilterGroup>
-                <Template.FilterLabel>Filial de Origem</Template.FilterLabel>
-                <SelectVariants value={selectedFilial} onChange={setSelectedFilial} list={filiais} titulo={undefined} />
-              </Template.FilterGroup>
+            <Template.FilterGroup>
+              <Template.FilterLabel>Filial de Origem</Template.FilterLabel>
+              <SelectVariants value={selectedFilial} onChange={setSelectedFilial} list={filiais} titulo={undefined} />
+            </Template.FilterGroup>
 
-              <Template.FilterGroup>
-                <Template.FilterLabel>Data do Registro</Template.FilterLabel>
-                <Template.InputData type="date" value={dataFiltro} onChange={(e) => setDataFiltro(e.target.value)} />
-              </Template.FilterGroup>
-             
-             <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                <Template.BtnClear onClick={() => {setBusca(""); setStatusAberto(null); setSituacaoEnum(null); setDataFiltro("");}}>Limpar</Template.BtnClear>
-                <Template.BtnAction onClick={() => onSubmit()}>Filtrar</Template.BtnAction>
-             </Stack>
+            <Template.FilterGroup>
+              <Template.FilterLabel>Data do Registro</Template.FilterLabel>
+              <Template.InputData type="date" value={dataFiltro} onChange={(e) => setDataFiltro(e.target.value)} />
+            </Template.FilterGroup>
+
+            <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+              <Template.BtnClear onClick={() => { setBusca(""); setStatusAberto(null); setSituacaoEnum(null); setDataFiltro(""); }}>Limpar</Template.BtnClear>
+              <Template.BtnAction onClick={() => onSubmit()}>Filtrar</Template.BtnAction>
+            </Stack>
           </Template.FloatingFilter>
         </Template.Toolbar>
 
@@ -264,16 +378,16 @@ export const ListaRegistroComponent = () => {
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map(header => (
                     <th key={header.id} style={{ width: header.getSize() }}>
-                      <div 
+                      <div
                         className="header-content"
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         {header.column.getCanSort() && (
-                          <Box sx={{ display: 'flex', color: header.column.getIsSorted() ? '#26a69a' : '#cbd5e1' }}>
-                            {header.column.getIsSorted() === 'asc' ? <ArrowUpwardIcon sx={{ fontSize: 14 }} /> : 
-                             header.column.getIsSorted() === 'desc' ? <ArrowDownwardIcon sx={{ fontSize: 14 }} /> : 
-                             <SortIcon sx={{ fontSize: 14, opacity: 0.5 }} />}
+                          <Box sx={{ display: 'flex', color: header.column.getIsSorted() ? '#4f46e5' : '#cbd5e1' }}>
+                            {header.column.getIsSorted() === 'asc' ? <ArrowUpwardIcon sx={{ fontSize: 14 }} /> :
+                             header.column.getIsSorted() === 'desc' ? <ArrowDownwardIcon sx={{ fontSize: 14 }} /> :
+                             <SortIcon sx={{ fontSize: 14, opacity: 0.4 }} />}
                           </Box>
                         )}
                       </div>
@@ -289,7 +403,11 @@ export const ListaRegistroComponent = () => {
             </thead>
             <tbody>
               {loading ? (
-                <Template.loadingRow><td colSpan={columns.length}><CircularProgress size={24} sx={{ color: '#26a69a' }} /></td></Template.loadingRow>
+                <Template.loadingRow>
+                  <td colSpan={columns.length}>
+                    <CircularProgress size={24} sx={{ color: '#4f46e5' }} />
+                  </td>
+                </Template.loadingRow>
               ) : table.getRowModel().rows.map(row => (
                 <tr key={row.id}>
                   {row.getVisibleCells().map(cell => (
@@ -303,18 +421,23 @@ export const ListaRegistroComponent = () => {
           </Template.Table>
         </Template.TableContainer>
 
-        <Box sx={{ p: 1, borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end' }}>
-             <Paginator totalPage={totaPage} handleNextPage={(_: any, v: number) => onSubmit(v - 1)} />
-        </Box>
+        <Template.Footer>
+          <Template.FooterInfo>
+            Exibindo {lista.length} de {totalElements}
+          </Template.FooterInfo>
+          <Paginator totalPage={totaPage} handleNextPage={(_: any, v: number) => onSubmit(v - 1)} />
+        </Template.Footer>
       </Paper>
 
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleCloseMenu}
+        PaperProps={{ sx: { borderRadius: '10px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)', minWidth: 180 } }}
+      >
         <MenuItem onClick={() => { navigate(`/portaria/controle/detalhes-registro?order=${itemSelecionado.id}`); handleCloseMenu(); }}>
-          <ListItemIcon><VisibilityIcon fontSize="small" /></ListItemIcon>
+          <ListItemIcon><VisibilityIcon fontSize="small" sx={{ color: '#4f46e5' }} /></ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.85rem' }}>Ver Detalhes</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { setItem(itemSelecionado); setExibeImagem(true); handleCloseMenu(); }}>
-          <ListItemIcon><ImageIcon fontSize="small" sx={{ color: '#26a69a' }} /></ListItemIcon>
+          <ListItemIcon><ImageIcon fontSize="small" sx={{ color: '#10b981' }} /></ListItemIcon>
           <ListItemText primaryTypographyProps={{ fontSize: '0.85rem' }}>Ver Fotos</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => { setId(itemSelecionado.id); setMsg(`Deseja excluir o registro?`); setAtivo(true); handleCloseMenu(); }}>
@@ -332,7 +455,7 @@ export const ListaRegistroComponent = () => {
                 item?.[tipo]?.imagem && (
                   <Template.divArea key={tipo}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
-                      <Typography variant="caption" sx={{ fontWeight: 800, color: '#26a69a' }}>{tipo}</Typography>
+                      <Typography variant="caption" sx={{ fontWeight: 800, color: '#4f46e5' }}>{tipo}</Typography>
                       <IconButton size="small" onClick={() => handleDownload(item[tipo].imagem, `Foto_${tipo}`)}><DownloadIcon fontSize="small" /></IconButton>
                     </Stack>
                     <Template.imgem src={item[tipo].imagem} />

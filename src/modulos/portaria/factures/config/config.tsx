@@ -1,7 +1,8 @@
-import { Outlet, useOutlet } from "react-router-dom";
+import { Navigate, Outlet, useOutlet } from "react-router-dom";
 import { MenuConfig } from "./menuConfig/menuConfig"
 import Template from "./ConfigCss"
 import { useEffect } from "react";
+
 export const ConfiguracaoComponent = () => {
   const outlet = useOutlet();
   useEffect(() => {
@@ -9,18 +10,14 @@ export const ConfiguracaoComponent = () => {
   }, [outlet]);
   return (
     <Template.container>
-      <MenuConfig></MenuConfig>
+      <MenuConfig />
       <Template.container_int>
         {outlet ? (
           <Outlet />
         ) : (
-          <Template.placeholder>
-            <h2>Bem-vindo às Configurações ⚙️</h2>
-            <p>Selecione uma opção no menu para começar.</p>
-          </Template.placeholder>
+          <Navigate to="historico" replace />
         )}
       </Template.container_int>
     </Template.container>
-
   )
 }
